@@ -2,7 +2,7 @@
 
 :video_game: An upload component that allows you to save more time playing games.
 
-# Installing
+## Installing
 
 ```sh
 $ composer require overtrue/laravel-uploader -vvv
@@ -21,7 +21,7 @@ and publish the assets using command:
 $ php artisan vendor:publish --provider=Overtrue\\LaravelUploader\\UploadServiceProvider
 ```
 
-# Usage
+## Usage
 
 1. Add the uploader component to right position of your form:
 
@@ -53,6 +53,6 @@ $ php artisan vendor:publish --provider=Overtrue\\LaravelUploader\\UploadService
     @uploader('assets')
     ```
 
-# License
+## License
 
 MIT
