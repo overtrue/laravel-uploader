@@ -144,7 +144,6 @@ class Uploader {
         picker.style.position = 'relative';
 
         pickerBtn.style.position = 'absolute';
-        pickerBtn.style.visable = 'hidden';
         pickerBtn.style.top = pickerBtn.style.bottom = pickerBtn.style.left = pickerBtn.style.right = 0;
         picker.appendChild(pickerBtn);
 
