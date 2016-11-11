@@ -48,7 +48,7 @@ class UploadServiceProvider extends ServiceProvider
     protected function loadRoute()
     {
         if (!$this->app->routesAreCached()) {
-            $this->app->make('router')->post('files/upload', 'Overtrue\LaravelUploader\Http\Controllers\UploadController@upload')->name('file.upload');
+            $this->app->make('router')->post('files/upload', __NAMESPACE__.'\Http\Controllers\UploadController@upload')->name('file.upload');
         }
     }
 
