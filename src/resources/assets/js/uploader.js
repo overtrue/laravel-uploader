@@ -28,7 +28,6 @@ class Uploader {
     init () {
         this.createPresentItems();
         this.pluploadUploader.init();
-        window.up = this.pluploadUploader;
     }
 
     createPresentItems() {
