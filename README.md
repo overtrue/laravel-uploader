@@ -1,6 +1,6 @@
 # Laravel Uploader
 
-:video_game: An upload component that allows you to save more time playing games.
+:palm_tree: An upload component that allows you to save more time playing LOL.
 
 ## Installing
 
