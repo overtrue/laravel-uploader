@@ -25,33 +25,33 @@ $ php artisan vendor:publish --provider=Overtrue\\LaravelUploader\\UploadService
 
 1. Add the uploader component to right position of your form:
 
-```php
-@uploader('images')
-```
+    ```php
+    @uploader('images')
+    ```
 
-or assign form name:
+    or assign form name:
 
-```php
-@uploader('images', ['name' => 'images'])
-```
+    ```php
+    @uploader('images', ['name' => 'images'])
+    ```
 
-or set max files:
+    or set max files:
 
-```php
-@uploader('images', ['max' => 10])
-```
+    ```php
+    @uploader('images', ['max' => 10])
+    ```
 
-and strategy (default: 'default'):
+    and strategy (default: 'default'):
 
-```php
-@uploader('images', ['strategy' => 'avatar'])
-```
+    ```php
+    @uploader('images', ['strategy' => 'avatar'])
+    ```
 
 2. Don't forget import uploader assets at the end of your template:
 
-```php
-@uploader('assets')
-```
+    ```php
+    @uploader('assets')
+    ```
 
 # License
 
