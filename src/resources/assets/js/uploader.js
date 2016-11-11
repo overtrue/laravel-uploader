@@ -18,7 +18,7 @@ class Uploader {
         this.maxItems = this.container.dataset.maxItems || 999;
         this.multiple = this.container.hasAttribute('multiple');
         this.itemsContainer = this.container.querySelector('.'+this.selectors.items);
-        this.picker = this.container.querySelector('.'+this.selectors.picker);
+        this.picker = this.createPicker();
         this.formName = (options.form_name || this.container.dataset.formName || 'images') + ((this.multiple) ? '' : '[]');
         this.itemTemplate = options.item_template || this.container.dataset.itemTemplate || '<img src="{URL}" />';
         this.assetBase = options.assetBase || this.container.dataset.assetBase || window.location.origin;
@@ -137,6 +137,20 @@ class Uploader {
         return item;
     }
 
+    createPicker() {
+        let picker = this.container.querySelector('.'+this.selectors.picker);
+        let pickerBtn = document.createElement('div');
+
+        picker.style.position = 'relative';
+
+        pickerBtn.style.position = 'absolute';
+        pickerBtn.style.visable = 'hidden';
+        pickerBtn.style.top = pickerBtn.style.bottom = pickerBtn.style.left = pickerBtn.style.right = 0;
+        picker.appendChild(pickerBtn);
+
+        return pickerBtn;
+    }
+
     createPluploadUploader(userOptions) {
         let options = Object.assign(window.uploader_options, {
             form_name: this.formName,
@@ -154,7 +168,8 @@ class Uploader {
             multipart_params: {
                 strategy: this.container.dataset.strategy || 'default'
             },
-            init: this.getPluploadUploaderListeners()
+            init: this.getPluploadUploaderListeners(),
+            container: this.container.querySelector('.'+this.selectors.picker)
         }, userOptions || {});
 
         return new plupload.Uploader(options);
