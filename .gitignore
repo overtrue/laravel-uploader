@@ -1,0 +1,14 @@
+*.DS_Store
+/vendor
+sftp-config.json
+/*.php
+/.idea
+/coverage
+/.split
+.yarnclean
+.php_cs
+.npm-debug.log
+yarn-error.log
+yarn.lock
+composer.lock
+/node_modules

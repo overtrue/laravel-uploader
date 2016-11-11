@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "prod": "gulp --production",
+    "dev": "gulp watch"
+  },
+  "devDependencies": {
+    "cropperjs": "^0.8.1",
+    "laravel-elixir": "^6.0.0-9",
+    "laravel-elixir-webpack-official": "^1.0.2",
+    "sortablejs": "^1.4.2"
+  }
+}
