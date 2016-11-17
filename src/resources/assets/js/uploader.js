@@ -19,7 +19,7 @@ class Uploader {
         this.multiple = this.container.hasAttribute('multiple');
         this.itemsContainer = this.container.querySelector('.'+this.selectors.items);
         this.picker = this.createPicker();
-        this.formName = (options.form_name || this.container.dataset.formName || 'images') + ((this.multiple) ? '' : '[]');
+        this.formName = (options.form_name || this.container.dataset.formName || 'images') + ((this.multiple) ? '[]' : '');
         this.itemTemplate = options.item_template || this.container.dataset.itemTemplate || '<img src="{URL}" />';
         this.assetBase = options.assetBase || this.container.dataset.assetBase || window.location.origin;
         this.pluploadUploader = this.createPluploadUploader(options);

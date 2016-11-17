@@ -9,7 +9,6 @@ $avatar-item-height: 200px;
 $border-color: #ccc;
 
 .file-uploader {
-    border: 1px solid $border-color;
     padding: 10px;
 
     * {
@@ -53,7 +52,7 @@ $border-color: #ccc;
     .file-uploader-picker {
         text-align: center;
         cursor: pointer;
-        color: $border-color;
+        color: #444;
         outline: none;
         display: block;
         user-select: none;
@@ -62,6 +61,7 @@ $border-color: #ccc;
         vertical-align: middle;
         transition: all 0.2s ease-in-out;
         background: transparent;
+        border: 1px solid $border-color;
 
         &:hover {
             border-color: darken($border-color, 20%);
@@ -109,7 +109,6 @@ $border-color: #ccc;
     }
 
     .file-uploader-picker {
-        border: 1px dashed $border-color;
         margin: 5px;
         display: inline-block;
         width: $list-item-height;
@@ -137,5 +136,15 @@ $border-color: #ccc;
         line-height: 1.25;
         white-space: nowrap;
         color: #444;
+    }
+}
+
+.file-uploader-image {
+    .file-uploader-items {
+        display: block;
+    }
+    .file-uploader-picker {
+        display: block;
+        width: 100%;
     }
 }
