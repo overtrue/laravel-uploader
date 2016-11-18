@@ -130,7 +130,7 @@ class Uploader {
         let that = this;
 
         item.querySelector('.'+this.selectors.delete_btn).addEventListener('click', function(){
-            item.parentNode.removeChild(item);
+            item.remove();
             that.checkReachMaxItemsLimit();
         });
 

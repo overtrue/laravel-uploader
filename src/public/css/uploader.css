@@ -14,7 +14,6 @@ ul {
       text-align: center;
       padding: 5px;
       position: relative;
-      margin: 5px;
       border: 1px solid #ccc; }
       .file-uploader .file-uploader-items .file-uploader-item img {
         max-height: 100%;
@@ -77,7 +76,8 @@ ul {
   width: 100px;
   height: 100px;
   display: inline-block;
-  vertical-align: top; }
+  vertical-align: top;
+  margin: 5px; }
   .file-uploader-images .file-uploader-item img {
     max-height: 100%; }
 
@@ -98,6 +98,7 @@ ul {
   height: 200px; }
 
 .file-uploader-avatar .file-uploader-picker {
+  margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 2px;
   line-height: 1.25;
@@ -108,6 +109,7 @@ ul {
   display: block; }
 
 .file-uploader-image .file-uploader-picker {
+  margin-top: 5px;
   display: block;
   width: 100%; }
 

@@ -23,7 +23,6 @@ $border-color: #ccc;
             text-align: center;
             padding: 5px;
             position: relative;
-            margin: 5px;
             border: 1px solid $border-color;
 
             img {
@@ -102,6 +101,7 @@ $border-color: #ccc;
         height: $list-item-height;
         display: inline-block;
         vertical-align: top;
+        margin: 5px;
 
         img {
             max-height: 100%;
@@ -131,6 +131,7 @@ $border-color: #ccc;
     }
 
     .file-uploader-picker {
+        margin-top: 5px;
         border: 1px solid $border-color;
         border-radius: 2px;
         line-height: 1.25;
@@ -144,6 +145,7 @@ $border-color: #ccc;
         display: block;
     }
     .file-uploader-picker {
+        margin-top: 5px;
         display: block;
         width: 100%;
     }

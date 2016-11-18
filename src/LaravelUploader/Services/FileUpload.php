@@ -58,7 +58,8 @@ class FileUpload
      */
     public function store(UploadedFile $file, $disk, $dir = '', Closure $callback = null)
     {
-        $hashName = $file->hashName();
+        $hashName = str_ireplace('.jpeg', '.jpg', $file->hashName());
+
         $mime = $file->getMimeType();
 
         $realname = $file->storeAs($dir, $hashName, $disk);
