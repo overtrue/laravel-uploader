@@ -5,12 +5,10 @@ ul {
 }
 
 $list-item-height: 100px;
-$avatar-item-height: 200px;
+$avatar-item-min-height: 160px;
 $border-color: #ccc;
 
 .file-uploader {
-    padding: 10px;
-
     * {
         box-sizing: border-box;
     }
@@ -96,6 +94,10 @@ $border-color: #ccc;
 }
 
 .file-uploader-images {
+    .file-uploader-items {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
     .file-uploader-item {
         width: $list-item-height;
         height: $list-item-height;
@@ -113,6 +115,7 @@ $border-color: #ccc;
         display: inline-block;
         width: $list-item-height;
         height: $list-item-height;
+        border-style: dashed;
 
         a {
             height: $list-item-height;
@@ -126,8 +129,7 @@ $border-color: #ccc;
     .file-uploader-item {
         margin: 0px;
         margin-bottom: 10px;
-        width: $avatar-item-height;
-        height: $avatar-item-height;
+        min-height: $avatar-item-min-height;
     }
 
     .file-uploader-picker {

@@ -3,7 +3,9 @@ class Uploader {
         if (typeof window.uploader_options === 'undefined') {
             return console.error('Base uploader config "window.uploader_options" not found.');
         }
-        options = options || {selectors: {}}
+        options = options || {
+            selectors: {}
+        }
 
         this.selectors = Object.assign({
             picker: 'file-uploader-picker',
@@ -17,7 +19,7 @@ class Uploader {
         this.container = document.querySelector(container);
         this.maxItems = this.container.dataset.maxItems || 999;
         this.multiple = this.container.hasAttribute('multiple');
-        this.itemsContainer = this.container.querySelector('.'+this.selectors.items);
+        this.itemsContainer = this.container.querySelector('.' + this.selectors.items);
         this.picker = this.createPicker();
         this.formName = (options.form_name || this.container.dataset.formName || 'images') + ((this.multiple) ? '[]' : '');
         this.itemTemplate = options.item_template || this.container.dataset.itemTemplate || '<img src="{URL}" />';
@@ -25,7 +27,7 @@ class Uploader {
         this.pluploadUploader = this.createPluploadUploader(options);
     }
 
-    init () {
+    init() {
         this.createPresentItems();
         this.pluploadUploader.init();
     }
@@ -34,9 +36,9 @@ class Uploader {
         var that = this;
         let items = JSON.parse(this.container.dataset.items || '[]');
 
-        items.forEach(function(url){
+        items.forEach(function(url) {
             that.appendItemToContainer(that.createFileItem({
-                id: "o_"+Math.random().toString(36).substring(7)
+                id: "o_" + Math.random().toString(36).substring(7)
             }, that.renderItemContent({
                 url: url
             })));
@@ -47,8 +49,8 @@ class Uploader {
         let item = document.createElement('div');
         item.id = file.id;
         item.setAttribute('class', this.selectors.item);
-        item.insertAdjacentHTML('beforeEnd', '<a class="'+this.selectors.delete_btn+'" title="删除">&times;</a>');
-        item.insertAdjacentHTML('beforeEnd', '<div class="'+this.selectors.progress_bar+'"><span></span></div>');
+        item.insertAdjacentHTML('beforeEnd', '<a class="' + this.selectors.delete_btn + '" title="删除">&times;</a>');
+        item.insertAdjacentHTML('beforeEnd', '<div class="' + this.selectors.progress_bar + '"><span></span></div>');
 
         if (content && content.toString().length) {
             item.insertAdjacentHTML('beforeEnd', content.toString());
@@ -59,13 +61,13 @@ class Uploader {
 
     renderItemContent(data) {
         var itemHtml = this.itemTemplate;
-        Object.keys(data).forEach(function(key){
+        Object.keys(data).forEach(function(key) {
             itemHtml = itemHtml.replace(new RegExp('\{' + key.toUpperCase() + '\}', 'g'), data[key]);
         });
 
         var relativeUrl = data.relative_url || data.url.replace(this.assetBase.replace(/\/$/, '') + '/', '');
 
-        itemHtml += '<input type="hidden" name="'+this.formName+'" value="'+relativeUrl+'" />';
+        itemHtml += '<input type="hidden" name="' + this.formName + '" value="' + relativeUrl + '" />';
 
         return itemHtml;
     }
@@ -73,7 +75,7 @@ class Uploader {
     appendItemToContainer(item) {
         this.checkReachMaxItemsLimit();
 
-        let position = this.itemsContainer.querySelector('.'+this.selectors.picker) || null;
+        let position = this.itemsContainer.querySelector('.' + this.selectors.picker) || null;
 
         this.itemsContainer.insertBefore(item, position);
 
@@ -99,13 +101,13 @@ class Uploader {
     }
 
     showItemProgress(file) {
-        let progressBar = this.getFileItem(file).querySelector('.'+this.selectors.progress_bar);
+        let progressBar = this.getFileItem(file).querySelector('.' + this.selectors.progress_bar);
         progressBar.style.display = 'block';
         progressBar.querySelector('span').style.width = file.percent + '%';
     }
 
     showItemError(err) {
-        this.getFileItem(err.file).querySelector('.'+this.selectors.progress_bar).display = 'none';
+        this.getFileItem(err.file).querySelector('.' + this.selectors.progress_bar).display = 'none';
 
         let error = document.createElement('div');
         error.setAttribute('class', this.selectors.error);
@@ -123,13 +125,14 @@ class Uploader {
     }
 
     getItemsCount() {
-        return this.itemsContainer.querySelectorAll('.'+this.selectors.item).length;
+        return this.itemsContainer.querySelectorAll('.' + this.selectors.item).length;
     }
 
     attachItemEventListeners(item) {
         let that = this;
 
-        item.querySelector('.'+this.selectors.delete_btn).addEventListener('click', function(){
+
+        item.querySelector('.' + this.selectors.delete_btn).addEventListener('click', function() {
             item.remove();
             that.checkReachMaxItemsLimit();
         });
@@ -138,7 +141,7 @@ class Uploader {
     }
 
     createPicker() {
-        let picker = this.container.querySelector('.'+this.selectors.picker);
+        let picker = this.container.querySelector('.' + this.selectors.picker);
         let pickerBtn = document.createElement('div');
 
         picker.style.position = 'relative';
@@ -154,21 +157,19 @@ class Uploader {
         let options = Object.assign(window.uploader_options, {
             form_name: this.formName,
             browse_button: this.picker,
-            filters : {
-                max_file_size : this.container.dataset.maxFileSize || "2mb",
-                mime_types: [
-                    {
-                        title : this.container.dataset.title || "Image files",
-                        extensions : this.container.dataset.extensions || "jpg,jpeg,gif,png,bmp"
-                    },
-                ]
+            filters: {
+                max_file_size: this.container.dataset.maxFileSize || "2mb",
+                mime_types: [{
+                    title: this.container.dataset.title || "Image files",
+                    extensions: this.container.dataset.extensions || "jpg,jpeg,gif,png,bmp"
+                }, ]
             },
             drop_element: this.picker,
             multipart_params: {
                 strategy: this.container.dataset.strategy || 'default'
             },
             init: this.getPluploadUploaderListeners(),
-            container: this.container.querySelector('.'+this.selectors.picker)
+            container: this.container.querySelector('.' + this.selectors.picker)
         }, userOptions || {});
 
         return new plupload.Uploader(options);
@@ -178,7 +179,13 @@ class Uploader {
         let that = this;
 
         return {
-            FilesAdded: function(up, files){
+            FilesAdded: function(up, files) {
+                if (!that.multiple) {
+                    var items = that.itemsContainer.querySelectorAll('.'+that.selectors.item);
+                    items.forEach(function(item){
+                        item.remove();
+                    })
+                }
                 that.checkReachMaxItemsLimit();
 
                 files = files.slice(0, that.maxItems - that.getItemsCount());
@@ -190,19 +197,19 @@ class Uploader {
                 up.start();
             },
 
-            FileUploaded: function(up, file, result){
+            FileUploaded: function(up, file, result) {
                 let response = JSON.parse(result.response);
                 var itemHtml = that.renderItemContent(response);
 
                 that.getFileItem(file).insertAdjacentHTML('beforeEnd', itemHtml);
-                that.getFileItem(file).removeChild(that.getFileItem(file).querySelector('.'+that.selectors.progress_bar));
+                that.getFileItem(file).removeChild(that.getFileItem(file).querySelector('.' + that.selectors.progress_bar));
             },
 
-            UploadProgress: function(up, file){
+            UploadProgress: function(up, file) {
                 that.showItemProgress(file);
             },
 
-            Error: function(up, err){
+            Error: function(up, err) {
                 that.showItemError(err);
             }
         }
@@ -210,3 +217,5 @@ class Uploader {
 }
 
 module.exports = Uploader;
+
+window.Uploader = Uploader;
