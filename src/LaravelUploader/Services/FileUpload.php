@@ -60,6 +60,8 @@ class FileUpload
     {
         $hashName = str_ireplace('.jpeg', '.jpg', $file->hashName());
 
+        $dir = $this->formatDir($dir);
+
         $mime = $file->getMimeType();
 
         $realname = $file->storeAs($dir, $hashName, $disk);
@@ -73,6 +75,26 @@ class FileUpload
                 'url' => asset("storage/$realname"),
                 'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($realname)),
         ];
+    }
+
+    /**
+     * Replace date variable in dir path.
+     *
+     * @param  string $dir
+     *
+     * @return string
+     */
+    protected function formatDir($dir)
+    {
+        $replacements = [
+            '{Y}' => date('Y'),
+            '{m}' => date('m'),
+            '{d}' => date('d'),
+            '{H}' => date('H'),
+            '{i}' => date('i'),
+        ];
+
+        return str_replace(array_keys($replacements), $replacements, $dir);
     }
 
     /**
