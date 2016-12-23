@@ -1,4 +1,5 @@
-class Uploader {
+
+export class Uploader {
     constructor(container, options) {
         if (typeof window.uploader_options === 'undefined') {
             return console.error('Base uploader config "window.uploader_options" not found.');
@@ -182,9 +183,9 @@ class Uploader {
             FilesAdded: function(up, files) {
                 if (!that.multiple) {
                     var items = that.itemsContainer.querySelectorAll('.'+that.selectors.item);
-                    items.forEach(function(item){
+                    Array.prototype.forEach.call(items, function(item){
                         item.remove();
-                    })
+                    });
                 }
                 that.checkReachMaxItemsLimit();
 
@@ -215,7 +216,4 @@ class Uploader {
         }
     }
 }
-
-module.exports = Uploader;
-
 window.Uploader = Uploader;
