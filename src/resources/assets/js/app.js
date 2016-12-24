@@ -1,4 +1,4 @@
-var Uploader = require('./uploader');
+import Uploader from './uploader';
 
 setTimeout(function(){
     if (document.querySelectorAll('.file-uploader').length) {

@@ -1,5 +1,5 @@
 
-export class Uploader {
+export default class Uploader {
     constructor(container, options) {
         if (typeof window.uploader_options === 'undefined') {
             return console.error('Base uploader config "window.uploader_options" not found.');
