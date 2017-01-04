@@ -119,4 +119,18 @@ ul {
   display: block;
   width: 100%; }
 
+.file-uploader-file .file-uploader-items {
+  display: block; }
+  .file-uploader-file .file-uploader-items .file-uploader-item {
+    min-width: 200px;
+    padding: 20px 0; }
+    .file-uploader-file .file-uploader-items .file-uploader-item .file-uploader-item-actions a {
+      padding: 0 10px;
+      text-decoration: none; }
+
+.file-uploader-file .file-uploader-picker {
+  margin-top: 5px;
+  display: block;
+  width: 100%; }
+
 /*# sourceMappingURL=uploader.css.map */
