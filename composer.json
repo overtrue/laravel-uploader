@@ -13,7 +13,8 @@
     "autoload": {
         "psr-4": {
             "Overtrue\\LaravelUploader\\": "src/LaravelUploader"
-        }
+        },
+        "files": ["src/LaravelUploader/helpers.php"]
     },
     "license": "MIT"
 }

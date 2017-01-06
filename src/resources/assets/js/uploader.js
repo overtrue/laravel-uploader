@@ -18,8 +18,13 @@ export default class Uploader {
         }, options.selectors);
 
         this.container = document.querySelector(container);
+
+        if (this.container.dataset.filters) {
+            options.filters = JSON.parse(this.container.dataset.filters);
+        }
+
         this.maxItems = this.container.dataset.maxItems || 999;
-        this.multiple = this.container.hasAttribute('multiple');
+        this.multiple = options.multi_selection = this.container.hasAttribute('multiple');
         this.itemsContainer = this.container.querySelector('.' + this.selectors.items);
         this.picker = this.createPicker();
         this.formName = (options.form_name || this.container.dataset.formName || 'images') + ((this.multiple) ? '[]' : '');
@@ -60,7 +65,7 @@ export default class Uploader {
         return this.attachItemEventListeners(item);
     }
 
-    renderItemContent(data) {
+    renderItemContent(data, withForm = true) {
         var itemHtml = this.itemTemplate;
         Object.keys(data).forEach(function(key) {
             itemHtml = itemHtml.replace(new RegExp('\{' + key.toUpperCase() + '\}', 'g'), data[key]);
@@ -68,13 +73,22 @@ export default class Uploader {
 
         var relativeUrl = data.relative_url || data.url.replace(this.assetBase.replace(/\/$/, '') + '/', '');
 
-        itemHtml += '<input type="hidden" name="' + this.formName + '" value="' + relativeUrl + '" />';
+        if (withForm) {
+            itemHtml += '<input type="hidden" name="' + this.formName + '" value="' + relativeUrl + '" />';
+        }
 
         return itemHtml;
     }
 
     appendItemToContainer(item) {
         this.checkReachMaxItemsLimit();
+
+         if (!this.multiple) {
+            var items = this.itemsContainer.querySelectorAll('.'+this.selectors.item);
+            Array.prototype.forEach.call(items, function(existedItem){
+                existedItem.remove();
+            });
+        }
 
         let position = this.itemsContainer.querySelector('.' + this.selectors.picker) || null;
 
@@ -108,13 +122,18 @@ export default class Uploader {
     }
 
     showItemError(err) {
-        this.getFileItem(err.file).querySelector('.' + this.selectors.progress_bar).display = 'none';
+        if (!this.getFileItem(err.file)) {
+            this.appendItemToContainer(this.createFileItem(err.file));
+        }
+        let item = this.getFileItem(err.file);
+
+        item.querySelector('.' + this.selectors.progress_bar).display = 'none';
 
         let error = document.createElement('div');
         error.setAttribute('class', this.selectors.error);
-        error.innerHTML = "Error #" + err.code + ": " + err.message;
+        error.innerHTML = "#" + err.code + ": " + err.message;
 
-        this.appendItemToContainer(error);
+        item.appendChild(error);
     }
 
     togglePicker() {
@@ -181,12 +200,6 @@ export default class Uploader {
 
         return {
             FilesAdded: function(up, files) {
-                if (!that.multiple) {
-                    var items = that.itemsContainer.querySelectorAll('.'+that.selectors.item);
-                    Array.prototype.forEach.call(items, function(item){
-                        item.remove();
-                    });
-                }
                 that.checkReachMaxItemsLimit();
 
                 files = files.slice(0, that.maxItems - that.getItemsCount());

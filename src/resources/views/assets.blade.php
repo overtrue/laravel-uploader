@@ -7,9 +7,6 @@
         runtimes : 'html5,flash,silverlight,html4',
         url : '{{ route('file.upload') }}',
 
-        // Maximum file size
-        max_file_size : '2mb',
-
         // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
         dragdrop: true,
 

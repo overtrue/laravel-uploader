@@ -44,7 +44,8 @@ class UploadController extends BaseController
     public function upload(Request $request)
     {
         $strategy = $request->get('strategy', 'default');
-        $config = config('uploader.strategies.'.$strategy);
+        $config = uploader_strategy($strategy);
+
         $directory = array_get($config, 'directory', '');
         $disk = array_get($config, 'storeage', 'public');
 
@@ -66,9 +67,6 @@ class UploadController extends BaseController
      */
     public function delete(Request $request)
     {
-        $strategy = $request->get('strategy', 'default');
-        $config = config("uploader.strategies.$strategy.storage", 'public');
-
         $result = ['result' => app(FileUpload::class)->delete($request->file)];
 
         Event::fire(new FileDeleted($request->file));
