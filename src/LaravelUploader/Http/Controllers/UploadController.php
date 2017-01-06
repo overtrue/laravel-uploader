@@ -47,7 +47,7 @@ class UploadController extends BaseController
         $config = uploader_strategy($strategy);
 
         $directory = array_get($config, 'directory', '');
-        $disk = array_get($config, 'storeage', 'public');
+        $disk = array_get($config, 'disk', 'public');
 
         Event::fire(new FileUploading($request->file));
 
