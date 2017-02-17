@@ -53,7 +53,7 @@ class UploadController extends BaseController
 
         $result = app(FileUpload::class)->store($request->file, $disk, $directory);
 
-        Event::fire(new FileUploaded($request->file));
+        Event::fire(new FileUploaded($request->file, $result));
 
         return $result;
     }
