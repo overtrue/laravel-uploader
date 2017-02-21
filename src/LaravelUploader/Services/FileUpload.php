@@ -64,7 +64,7 @@ class FileUpload
 
         $mime = $file->getMimeType();
 
-        $realname = $file->storeAs($dir, $hashName, $disk);
+        $realname = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
 
         return [
                 'success' => true,

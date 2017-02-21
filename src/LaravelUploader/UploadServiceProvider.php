@@ -115,7 +115,7 @@ class UploadServiceProvider extends ServiceProvider
     protected function registerViewDirective()
     {
         Blade::directive('uploader', function ($expression) {
-            $parts = explode(',', $expression);
+            $parts = explode(',', trim($expression, '()'));
             $data = count($parts) > 1 ? implode(',', $parts) : '[]';
             $template = 'uploader::'.trim(array_shift($parts), '"\'');
 
