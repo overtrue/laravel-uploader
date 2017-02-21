@@ -67,6 +67,7 @@ class FileUpload
         $realname = $file->storeAs($dir, $hashName, $disk);
 
         return [
+                'success' => true,
                 'filename' => $hashName,
                 'original_name' => $file->getClientOriginalName(),
                 'mime' => $mime,

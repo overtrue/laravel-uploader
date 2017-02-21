@@ -12,6 +12,7 @@ return [
          * default strategy.
          */
         'default' => [
+            'input_name' => 'file',
             'mimes' => ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'],
             'storeage' => 'public',
             'directory' => '', // directory,
