@@ -33,6 +33,7 @@ class FileUploaded
      * 
      * @param Illuminate\Http\UploadedFile $file
      * @param array $result
+     * @param string $strategy
      */
     public function __construct(UploadedFile $file, array $result, string $strategy)
     {
