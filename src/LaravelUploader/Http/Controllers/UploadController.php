@@ -60,7 +60,7 @@ class UploadController extends BaseController
 
         $result = app(FileUpload::class)->store($request->file($inputName), $disk, $directory);
 
-        if (!is_null($modified = Event::fire(new FileUploaded($request->file, $result), [], true))) {
+        if (!is_null($modified = Event::fire(new FileUploaded($request->file, $result, $strategy), [], true))) {
             $result = $modified;
         }
 
