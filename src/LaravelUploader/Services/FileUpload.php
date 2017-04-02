@@ -9,6 +9,7 @@
 namespace Overtrue\LaravelUploader\Services;
 
 use Closure;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Filesystem\FilesystemManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -64,7 +65,7 @@ class FileUpload
 
         $mime = $file->getMimeType();
 
-        $realname = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
+        $path = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
 
         return [
                 'success' => true,
@@ -72,9 +73,9 @@ class FileUpload
                 'original_name' => $file->getClientOriginalName(),
                 'mime' => $mime,
                 'size' => $file->getClientSize(),
-                'relative_url' => "storage/$realname",
-                'url' => asset("storage/$realname"),
-                'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($realname)),
+                'relative_url' => $path,
+                'url' => Storage::url($path),
+                'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($path)),
         ];
     }
 

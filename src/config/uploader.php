@@ -14,7 +14,7 @@ return [
         'default' => [
             'input_name' => 'file',
             'mimes' => ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'],
-            'storeage' => 'public',
+            'disk' => 'public',
             'directory' => '{Y}/{m}/{d}', // directory,
             'max_file_size' => '2m',
         ],

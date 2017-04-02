@@ -45,22 +45,23 @@ class UploadController extends BaseController
     {
         $strategy = $request->get('strategy', 'default');
         $config = uploader_strategy($strategy);
+
         $inputName = array_get($config, 'input_name', 'file');
         $directory = array_get($config, 'directory', '{Y}/{m}/{d}');
         $disk = array_get($config, 'disk', 'public');
-
         if (!$request->hasFile($inputName)) {
             return [
                 'success' => false,
                 'error' => 'no file found.',
             ];
         }
+        $file = $request->file($inputName);
 
-        Event::fire(new FileUploading($request->file($inputName)));
+        Event::fire(new FileUploading($file));
 
-        $result = app(FileUpload::class)->store($request->file($inputName), $disk, $directory);
+        $result = app(FileUpload::class)->store($file, $disk, $directory);
 
-        if (!is_null($modified = Event::fire(new FileUploaded($request->file, $result), [], true))) {
+        if (!is_null($modified = Event::fire(new FileUploaded($file, $result, $strategy, $config), [], true))) {
             $result = $modified;
         }
 

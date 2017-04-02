@@ -16,20 +16,38 @@ class FileUploaded
 
     /**
      * The result of the uploaded file.
-     * 
+     *
      * @var array
      */
     public $result;
 
     /**
-     * Create a new event instance.
-     * 
-     * @param Illuminate\Http\UploadedFile $file
-     * @param array $result
+     * The strategy of the uploaded file.
+     *
+     * @var string
      */
-    public function __construct(UploadedFile $file, array $result)
+    public $strategy;
+
+    /**
+     * The config of strategy.
+     *
+     * @var array
+     */
+    public $config;
+
+    /**
+     * Create a new event instance.
+     *
+     * @param Illuminate\Http\UploadedFile $file
+     * @param array  $result
+     * @param string $strategy
+     * @param array  $config
+     */
+    public function __construct(UploadedFile $file, array $result, string $strategy, array $config)
     {
         $this->file = $file;
         $this->result = $result;
+        $this->strategy = $strategy;
+        $this->config = $config;
     }
 }
