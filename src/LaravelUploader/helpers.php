@@ -10,7 +10,9 @@ if (!function_exists('uploader_strategy')) {
      */
     function uploader_strategy($strategy)
     {
-        return array_merge_recursive_distinct(config('uploader.strategies.default'), config('uploader.strategies.'.$strategy, []));
+        return array_merge_recursive_distinct(config('uploader.strategies.default'), config('uploader.strategies.'.$strategy, [
+            'filters' => [],
+        ]));
     }
 }
 
@@ -29,7 +31,7 @@ if (!function_exists('array_merge_recursive_distinct')) {
 
         foreach ($array2 as $key => &$value) {
             if (is_array($value) && isset($merged [$key]) && is_array($merged [$key])) {
-                $merged[$key] = array_merge_recursive_distinct ($merged [$key], $value);
+                $merged[$key] = array_merge_recursive_distinct($merged [$key], $value);
             } else {
                 $merged[$key] = $value;
             }
