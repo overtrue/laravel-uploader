@@ -10,9 +10,9 @@ if (!function_exists('uploader_strategy')) {
      */
     function uploader_strategy($strategy)
     {
-        return array_merge_recursive_distinct(config('uploader.strategies.default'), config('uploader.strategies.'.$strategy, [
+        return array_merge_recursive_distinct([
             'filters' => [],
-        ]));
+        ], config('uploader.strategies.default'), config('uploader.strategies.'.$strategy));
     }
 }
 
