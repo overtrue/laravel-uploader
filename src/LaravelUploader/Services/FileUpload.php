@@ -67,6 +67,10 @@ class FileUpload
 
         $path = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
 
+        if (!$path) {
+            throw new Exception("Failed to store file.");
+        }
+
         return [
             'success' => true,
             'filename' => $hashName,
