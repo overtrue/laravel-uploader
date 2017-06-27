@@ -52,12 +52,12 @@ class FileUpload
      * on failure.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
-     * @param string                                              $file
-     * @param string                                              $path path to store.
+     * @param                                                     $disk
+     * @param string                                              $dir
      *
      * @return array|bool
      */
-    public function store(UploadedFile $file, $disk, $dir = '', Closure $callback = null)
+    public function store(UploadedFile $file, $disk, $dir = '')
     {
         $hashName = str_ireplace('.jpeg', '.jpg', $file->hashName());
 
@@ -68,14 +68,14 @@ class FileUpload
         $path = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
 
         return [
-                'success' => true,
-                'filename' => $hashName,
-                'original_name' => $file->getClientOriginalName(),
-                'mime' => $mime,
-                'size' => $file->getClientSize(),
-                'relative_url' => $path,
-                'url' => Storage::url($path),
-                'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($path)),
+            'success' => true,
+            'filename' => $hashName,
+            'original_name' => $file->getClientOriginalName(),
+            'mime' => $mime,
+            'size' => $file->getClientSize(),
+            'relative_url' => $path,
+            'url' => Storage::disk($disk)->url($path),
+            'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($path)),
         ];
     }
 
