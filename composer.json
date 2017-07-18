@@ -16,5 +16,10 @@
         },
         "files": ["src/LaravelUploader/helpers.php"]
     },
+    "extra": {
+        "laravel": {
+            "providers": ["\\Overtrue\\LaravelUploader\\UploadServiceProvider"]
+        }
+    },
     "license": "MIT"
 }
