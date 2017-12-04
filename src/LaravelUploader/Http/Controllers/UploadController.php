@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Event;
 use Overtrue\LaravelUploader\Events\FileDeleted;
@@ -59,13 +60,29 @@ class UploadController extends BaseController
 
         Event::fire(new FileUploading($file));
 
-        $result = app(FileUpload::class)->store($file, $disk, $directory);
+        $filename = $this->getFilename($file, $config);
+
+        $result = app(FileUpload::class)->store($file, $disk, $filename, $directory);
 
         if (!is_null($modified = Event::fire(new FileUploaded($file, $result, $strategy, $config), [], true))) {
             $result = $modified;
         }
 
         return $result;
+    }
+
+    public function getFilename(UploadedFile $file, $config)
+    {
+        switch (array_get($config, 'filename_hash', 'default')) {
+            case 'origional':
+                return $file->getClientOriginalName();
+            case 'md5_file':
+                return md5_file($file->getRealPath()).'.'.$file->guessExtension();
+                break;
+            case 'random':
+            default:
+                return $file->hashName();
+        }
     }
 
     /**

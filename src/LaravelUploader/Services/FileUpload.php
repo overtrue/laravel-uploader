@@ -52,14 +52,15 @@ class FileUpload
      * on failure.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
-     * @param                                                     $disk
+     * @param string                                              $disk
+     * @param string                                              $filename
      * @param string                                              $dir
      *
      * @return array|bool
      */
-    public function store(UploadedFile $file, $disk, $dir = '')
+    public function store(UploadedFile $file, $disk, $filename, $dir = '')
     {
-        $hashName = str_ireplace('.jpeg', '.jpg', $file->hashName());
+        $hashName = str_ireplace('.jpeg', '.jpg', $filename);
 
         $dir = $this->formatDir($dir);
 
