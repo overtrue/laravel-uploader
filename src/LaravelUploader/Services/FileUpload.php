@@ -1,16 +1,18 @@
 <?php
 
 /*
- * This file is part of the laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
- * (c) 2016 overtrue <i@overtrue.me>
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Overtrue\LaravelUploader\Services;
 
-use Closure;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUpload
@@ -69,7 +71,7 @@ class FileUpload
         $path = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
 
         if (!$path) {
-            throw new Exception("Failed to store file.");
+            throw new Exception('Failed to store file.');
         }
 
         return [
@@ -88,7 +90,7 @@ class FileUpload
     /**
      * Replace date variable in dir path.
      *
-     * @param  string $dir
+     * @param string $dir
      *
      * @return string
      */

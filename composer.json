@@ -18,7 +18,10 @@
     },
     "extra": {
         "laravel": {
-            "providers": ["\\Overtrue\\LaravelUploader\\UploadServiceProvider"]
+            "providers": ["\\Overtrue\\LaravelUploader\\UploadServiceProvider"],
+            "aliases": {
+                "LaravelUploader": "\\Overtrue\\LaravelUploader\\LaravelUploader"
+            }
         }
     },
     "license": "MIT"

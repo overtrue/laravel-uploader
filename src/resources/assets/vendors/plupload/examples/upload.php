@@ -1,9 +1,12 @@
 <?php
 
 /*
- * This file is part of the laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
- * (c) 2016 overtrue <i@overtrue.me>
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 /**
@@ -16,10 +19,10 @@
  * Contributing: http://www.plupload.com/contributing
  */
 
-#!! IMPORTANT: 
-#!! this file is just an example, it doesn't incorporate any security checks and 
-#!! is not recommended to be used in production environment as it is. Be sure to 
-#!! revise it and customize to your needs.
+//!! IMPORTANT:
+//!! this file is just an example, it doesn't incorporate any security checks and
+//!! is not recommended to be used in production environment as it is. Be sure to
+//!! revise it and customize to your needs.
 
 // Make sure file is not cached (as it happens for example on iOS devices)
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -28,7 +31,7 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
-/* 
+/*
 // Support CORS
 header("Access-Control-Allow-Origin: *");
 // other CORS headers if any...
@@ -69,7 +72,7 @@ $filePath = $targetDir.DIRECTORY_SEPARATOR.$fileName;
 $chunk = isset($_REQUEST['chunk']) ? intval($_REQUEST['chunk']) : 0;
 $chunks = isset($_REQUEST['chunks']) ? intval($_REQUEST['chunks']) : 0;
 
-// Remove old temp files	
+// Remove old temp files
 if ($cleanupTargetDir) {
     if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
         die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
@@ -120,7 +123,7 @@ while ($buff = fread($in, 4096)) {
 
 // Check if file has been uploaded
 if (!$chunks || $chunk == $chunks - 1) {
-    // Strip the temp .part suffix off 
+    // Strip the temp .part suffix off
     rename("{$filePath}.part", $filePath);
 }
 

@@ -1,5 +1,5 @@
 <?php 
-/* 
+/*
 In order to upload files to S3 using Flash runtime, one should start by placing crossdomain.xml into the bucket.
 crossdomain.xml can be as simple as this:
 
@@ -85,9 +85,9 @@ $(function() {
 		runtimes : 'html5,flash,silverlight',
 		/*
 		 * Sometime S3 will redirect the bucker url 'http://<?php echo $bucket; ?>.s3.amazonaws.com/' to
-		 * https://<?= $bucket ?>.{region}.amazonaws.com the header sent is a 307 and it will break pupload
+		 * https://<?= $bucket; ?>.{region}.amazonaws.com the header sent is a 307 and it will break pupload
 		 */
-		url : 'https://<?= $bucket ?>.<?= $region ?>.amazonaws.com/',
+		url : 'https://<?= $bucket; ?>.<?= $region; ?>.amazonaws.com/',
 		
 		multipart: true,
 		multipart_params: {

@@ -1,9 +1,12 @@
 <?php
 
 /*
- * This file is part of the laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
- * (c) 2016 overtrue <i@overtrue.me>
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Overtrue\LaravelUploader\Events;
@@ -39,9 +42,9 @@ class FileUploaded
      * Create a new event instance.
      *
      * @param Illuminate\Http\UploadedFile $file
-     * @param array  $result
-     * @param string $strategy
-     * @param array  $config
+     * @param array                        $result
+     * @param string                       $strategy
+     * @param array                        $config
      */
     public function __construct(UploadedFile $file, array $result, string $strategy, array $config)
     {

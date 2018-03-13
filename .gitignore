@@ -11,4 +11,5 @@ sftp-config.json
 yarn-error.log
 yarn.lock
 composer.lock
+.php_cs.cache
 /node_modules

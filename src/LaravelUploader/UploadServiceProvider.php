@@ -1,9 +1,12 @@
 <?php
 
 /*
- * This file is part of the laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
- * (c) 2016 overtrue <i@overtrue.me>
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Overtrue\LaravelUploader;
@@ -22,7 +25,6 @@ class UploadServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoute();
         $this->loadConfig();
         $this->loadViews();
         $this->loadAssets();
@@ -39,16 +41,6 @@ class UploadServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register routes.
-     */
-    protected function loadRoute()
-    {
-        if (!$this->app->routesAreCached()) {
-            $this->app->make('router')->post('files/upload', __NAMESPACE__.'\Http\Controllers\UploadController@upload')->name('file.upload');
-        }
-    }
-
-    /**
      * Register config.
      */
     protected function loadConfig()
@@ -59,9 +51,7 @@ class UploadServiceProvider extends ServiceProvider
     }
 
     /**
-     * [loadTranslations description].
-     *
-     * @return [type] [description]
+     * load translations.
      */
     protected function loadTranslations()
     {
@@ -82,7 +72,6 @@ class UploadServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/uploader'),
         ]);
-
     }
 
     /**
