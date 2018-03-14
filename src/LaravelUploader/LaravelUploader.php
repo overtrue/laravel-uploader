@@ -8,6 +8,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+namespace Overtrue\LaravelUploader;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -16,7 +17,10 @@ class LaravelUploader extends Facade
     public static function routes()
     {
         if (!self::$app->routesAreCached()) {
-            self::$app->make('router')->post('files/upload', __NAMESPACE__.'\Http\Controllers\UploadController@upload')->name('file.upload');
+            self::$app->make('router')->post('files/upload', [
+                'uses' => '\Overtrue\LaravelUploader\Http\Controllers\UploadController@upload',
+                'name' => 'file.upload'
+            ]);
         }
     }
 }
