@@ -5,29 +5,29 @@
 ## Installing
 
 1. register provider and configuration.
-```sh
-$ composer require overtrue/laravel-uploader -vvv
-```
+    ```sh
+    $ composer require overtrue/laravel-uploader -vvv
+    ```
 
-then register the package service provider, add the following line to `providers` section of `config/app.php`:
+    then register the package service provider, add the following line to `providers` section of `config/app.php`:
 
 
-```php
-Overtrue\LaravelUploader\UploadServiceProvider::class,
-```
+    ```php
+    Overtrue\LaravelUploader\UploadServiceProvider::class,
+    ```
 
-and publish the assets using command:
+    and publish the assets using command:
 
-```sh
-$ php artisan vendor:publish --provider=Overtrue\\LaravelUploader\\UploadServiceProvider
-```
+    ```sh
+    $ php artisan vendor:publish --provider=Overtrue\\LaravelUploader\\UploadServiceProvider
+    ```
 
 2. Routing
 
-You can register routes in `routes/web.php` or other routes file:
+    You can register routes in `routes/web.php` or other routes file:
 
-```php
-\LaravelUploader::routes();
+    ```php
+    \LaravelUploader::routes();
 ```
 
 ## Usage
