@@ -28,7 +28,7 @@
 
     ```php
     \LaravelUploader::routes();
-```
+    ```
 
 ## Usage
 
