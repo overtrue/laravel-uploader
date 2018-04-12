@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -78,11 +78,11 @@ if ($cleanupTargetDir) {
         die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
     }
 
-    while (($file = readdir($dir)) !== false) {
+    while (false !== ($file = readdir($dir))) {
         $tmpfilePath = $targetDir.DIRECTORY_SEPARATOR.$file;
 
         // If temp file is current file proceed to the next
-        if ($tmpfilePath == "{$filePath}.part") {
+        if ($tmpfilePath === "{$filePath}.part") {
             continue;
         }
 
@@ -122,7 +122,7 @@ while ($buff = fread($in, 4096)) {
 @fclose($in);
 
 // Check if file has been uploaded
-if (!$chunks || $chunk == $chunks - 1) {
+if (!$chunks || $chunk === $chunks - 1) {
     // Strip the temp .part suffix off
     rename("{$filePath}.part", $filePath);
 }

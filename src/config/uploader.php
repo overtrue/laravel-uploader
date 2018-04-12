@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
  * (c) overtrue <i@overtrue.me>
  *
