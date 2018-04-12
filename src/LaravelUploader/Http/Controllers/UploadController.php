@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -81,6 +81,7 @@ class UploadController extends BaseController
                 return $file->getClientOriginalName();
             case 'md5_file':
                 return md5_file($file->getRealPath()).'.'.$file->guessExtension();
+
                 break;
             case 'random':
             default:

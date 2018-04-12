@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/laravel-uploader.
+ * This file is part of the overtrue/laravel-uploader.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -116,7 +116,7 @@ class FileUpload
      */
     public function delete($path, $disk)
     {
-        if (stripos($path, 'storage') === 0) {
+        if (0 === stripos($path, 'storage')) {
             $path = substr($path, strlen('storage'));
         }
 
