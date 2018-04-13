@@ -20,7 +20,7 @@ class LaravelUploader extends Facade
         if (!self::$app->routesAreCached()) {
             self::$app->make('router')->post('files/upload', [
                 'uses' => '\Overtrue\LaravelUploader\Http\Controllers\UploadController@upload',
-                'name' => 'file.upload',
+                'as' => 'file.upload',
             ]);
         }
     }
