@@ -81,7 +81,7 @@ class FileUpload
             'mime' => $mime,
             'size' => $file->getClientSize(),
             'storage_path' => $path,
-            'relative_url' => '/storage/'.$path,
+            'relative_url' => str_replace(env('APP_URL'), '', Storage::disk($disk)->url($path)),
             'url' => Storage::disk($disk)->url($path),
             'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($path)),
         ];
