@@ -41,10 +41,10 @@ class FileUploaded
     /**
      * Create a new event instance.
      *
-     * @param Illuminate\Http\UploadedFile $file
-     * @param array                        $result
-     * @param string                       $strategy
-     * @param array                        $config
+     * @param \Illuminate\Http\UploadedFile           $file
+     * @param array                                   $result
+     * @param \Overtrue\LaravelUploader\Events\string $strategy
+     * @param array                                   $config
      */
     public function __construct(UploadedFile $file, array $result, string $strategy, array $config)
     {

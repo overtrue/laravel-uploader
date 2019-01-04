@@ -112,7 +112,9 @@ class FileUpload
      *
      * @param string $path
      *
-     * @return array
+     * @param        $disk
+     *
+     * @return void
      */
     public function delete($path, $disk)
     {

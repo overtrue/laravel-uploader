@@ -94,7 +94,7 @@ class UploadController extends BaseController
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function delete(Request $request)
     {
