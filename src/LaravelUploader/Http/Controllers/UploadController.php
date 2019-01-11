@@ -60,6 +60,14 @@ class UploadController extends BaseController
             ];
         }
         $file = $request->file($inputName);
+        $mime = $file->getClientMimeType();
+
+        if (!\in_array($mime, $config['mimes'])) {
+            return [
+                'success' => false,
+                'error' => \sprintf('Invalid mime "%s".', $mime),
+            ];
+        }
 
         Event::fire(new FileUploading($file));
 
@@ -77,7 +85,7 @@ class UploadController extends BaseController
     public function getFilename(UploadedFile $file, $config)
     {
         switch (array_get($config, 'filename_hash', 'default')) {
-            case 'origional':
+            case 'original':
                 return $file->getClientOriginalName();
             case 'md5_file':
                 return md5_file($file->getRealPath()).'.'.$file->guessExtension();

@@ -66,7 +66,7 @@ class FileUpload
 
         $dir = $this->formatDir($dir);
 
-        $mime = $file->getMimeType();
+        $mime = $file->getClientMimeType();
 
         $path = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
 
