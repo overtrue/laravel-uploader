@@ -111,10 +111,7 @@ class FileUpload
      * Delete a file from disk.
      *
      * @param string $path
-     *
      * @param        $disk
-     *
-     * @return void
      */
     public function delete($path, $disk)
     {
