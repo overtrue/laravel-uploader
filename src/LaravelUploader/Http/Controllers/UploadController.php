@@ -17,6 +17,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Overtrue\LaravelUploader\Events\FileDeleted;
 use Overtrue\LaravelUploader\Events\FileUploaded;
@@ -50,9 +51,9 @@ class UploadController extends BaseController
         $strategy = $request->get('strategy', 'default');
         $config = uploader_strategy($strategy);
 
-        $inputName = array_get($config, 'input_name', 'file');
-        $directory = array_get($config, 'directory', '{Y}/{m}/{d}');
-        $disk = array_get($config, 'disk', 'public');
+        $inputName = Arr::get($config, 'input_name', 'file');
+        $directory = Arr::get($config, 'directory', '{Y}/{m}/{d}');
+        $disk = Arr::get($config, 'disk', 'public');
         if (!$request->hasFile($inputName)) {
             return [
                 'success' => false,
@@ -84,7 +85,7 @@ class UploadController extends BaseController
 
     public function getFilename(UploadedFile $file, $config)
     {
-        switch (array_get($config, 'filename_hash', 'default')) {
+        switch (Arr::get($config, 'filename_hash', 'default')) {
             case 'original':
                 return $file->getClientOriginalName();
             case 'md5_file':
