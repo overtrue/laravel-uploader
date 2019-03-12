@@ -59,6 +59,7 @@ class FileUpload
      * @param string                                              $dir
      *
      * @return array|bool
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function store(UploadedFile $file, $disk, $filename, $dir = '')
