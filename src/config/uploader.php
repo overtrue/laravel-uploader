@@ -15,12 +15,13 @@ return [
          * default strategy.
          */
         'default' => [
-            'input_name' => 'file',
+            'name' => 'file',
             'mimes' => ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'],
             'disk' => 'public',
             'directory' => 'uploads/{Y}/{m}/{d}', // directory,
-            'max_file_size' => '2m',
+            'max_size' => '2m',
             'filename_hash' => 'random', // random/md5_file/original
+            'response_handle' =>
         ],
 
         // avatar extends default

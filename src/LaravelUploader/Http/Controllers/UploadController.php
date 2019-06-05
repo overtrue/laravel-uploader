@@ -23,6 +23,7 @@ use Overtrue\LaravelUploader\Events\FileDeleted;
 use Overtrue\LaravelUploader\Events\FileUploaded;
 use Overtrue\LaravelUploader\Events\FileUploading;
 use Overtrue\LaravelUploader\Services\FileUpload;
+use Overtrue\LaravelUploader\StrategyResolver;
 
 /**
  * class UploadController.
@@ -48,54 +49,29 @@ class UploadController extends BaseController
      */
     public function upload(Request $request)
     {
-        $strategy = $request->get('strategy', 'default');
-        $config = uploader_strategy($strategy);
+        $strategy = StrategyResolver::resolve($request->get('strategy', 'default'));
 
-        $inputName = Arr::get($config, 'input_name', 'file');
-        $directory = Arr::get($config, 'directory', '{Y}/{m}/{d}');
-        $disk = Arr::get($config, 'disk', 'public');
-        if (!$request->hasFile($inputName)) {
-            return [
-                'success' => false,
-                'error' => 'no file found.',
-            ];
+        if (!$request->hasFile($strategy->inputName)) {
+            \abort(422, 'no file found.');
         }
-        $file = $request->file($inputName);
+        $file = $request->file($strategy->inputName);
         $mime = $file->getClientMimeType();
 
-        if (!\in_array($mime, $config['mimes'])) {
-            return [
-                'success' => false,
-                'error' => \sprintf('Invalid mime "%s".', $mime),
-            ];
+        if ($strategy->isValidMime($mime)) {
+            \abort(422, \sprintf('Invalid mime "%s".', $mime));
         }
 
         Event::fire(new FileUploading($file));
 
-        $filename = $this->getFilename($file, $config);
+        $filename = $strategy->getFilename($file);
 
-        $result = app(FileUpload::class)->store($file, $disk, $filename, $directory);
+        $result = app(FileUpload::class)->store($file, $strategy->disk, $filename, $strategy->directory);
 
-        if (!is_null($modified = Event::fire(new FileUploaded($file, $result, $strategy, $config), [], true))) {
+        if (!is_null($modified = Event::fire(new FileUploaded($file, $result, $strategy), [], true))) {
             $result = $modified;
         }
 
         return $result;
-    }
-
-    public function getFilename(UploadedFile $file, $config)
-    {
-        switch (Arr::get($config, 'filename_hash', 'default')) {
-            case 'original':
-                return $file->getClientOriginalName();
-            case 'md5_file':
-                return md5_file($file->getRealPath()).'.'.$file->guessExtension();
-
-                break;
-            case 'random':
-            default:
-                return $file->hashName();
-        }
     }
 
     /**

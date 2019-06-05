@@ -11,7 +11,6 @@
 
 namespace Overtrue\LaravelUploader;
 
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Overtrue\LaravelUploader\Services\FileUpload;
 
@@ -26,10 +25,7 @@ class UploadServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadConfig();
-        $this->loadViews();
-        $this->loadAssets();
         $this->loadTranslations();
-        $this->registerViewDirective();
     }
 
     /**
@@ -63,48 +59,12 @@ class UploadServiceProvider extends ServiceProvider
     }
 
     /**
-     * Load views.
-     */
-    protected function loadViews()
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'uploader');
-
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/uploader'),
-        ]);
-    }
-
-    /**
-     * Load assets.
-     */
-    protected function loadAssets()
-    {
-        $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/uploader'),
-        ], 'public');
-    }
-
-    /**
      * Register upload services.
      */
     protected function registerServices()
     {
         $this->app->singleton(FileUpload::class, function ($app) {
             return new FileUpload($app['filesystem']);
-        });
-    }
-
-    /**
-     * Register view directive.
-     */
-    protected function registerViewDirective()
-    {
-        Blade::directive('uploader', function ($expression) {
-            $parts = explode(',', trim($expression, '()'));
-            $data = count($parts) > 1 ? implode(',', $parts) : '[]';
-            $template = 'uploader::'.trim(array_shift($parts), '"\'');
-
-            return "<?php echo \$__env->make('{$template}', array_merge(array_except(get_defined_vars(), array('__data', '__path')), (array)$data))->render(); ?>";
         });
     }
 }

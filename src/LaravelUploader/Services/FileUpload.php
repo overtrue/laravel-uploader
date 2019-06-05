@@ -56,21 +56,19 @@ class FileUpload
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
      * @param string                                              $disk
      * @param string                                              $filename
-     * @param string                                              $dir
+     * @param string                                              $directory
      *
      * @return array|bool
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function store(UploadedFile $file, $disk, $filename, $dir = '')
+    public function store(UploadedFile $file, string $disk, string $filename, string $directory = '')
     {
         $hashName = str_ireplace('.jpeg', '.jpg', $filename);
 
-        $dir = $this->formatDir($dir);
-
         $mime = $file->getClientMimeType();
 
-        $path = $this->filesystem->disk($disk)->putFileAs($dir, $file, $hashName);
+        $path = $this->filesystem->disk($disk)->putFileAs($directory, $file, $hashName);
 
         if (!$path) {
             throw new Exception('Failed to store file.');
@@ -87,26 +85,6 @@ class FileUpload
             'url' => Storage::disk($disk)->url($path),
             'dataURL' => $this->getDataUrl($mime, $this->filesystem->disk($disk)->get($path)),
         ];
-    }
-
-    /**
-     * Replace date variable in dir path.
-     *
-     * @param string $dir
-     *
-     * @return string
-     */
-    protected function formatDir($dir)
-    {
-        $replacements = [
-            '{Y}' => date('Y'),
-            '{m}' => date('m'),
-            '{d}' => date('d'),
-            '{H}' => date('H'),
-            '{i}' => date('i'),
-        ];
-
-        return str_replace(array_keys($replacements), $replacements, $dir);
     }
 
     /**
