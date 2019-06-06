@@ -1,12 +1,20 @@
 <?php
 
+/*
+ * This file is part of the overtrue/laravel-uploader.
+ *
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Overtrue\LaravelUploader;
 
 use Illuminate\Http\Request;
 
 /**
- * Class StrategyResolver
+ * Class StrategyResolver.
  */
 class StrategyResolver
 {
@@ -48,5 +56,4 @@ class StrategyResolver
 
         return $merged;
     }
-
 }
