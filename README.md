@@ -1,6 +1,6 @@
 # Laravel Uploader
 
-:palm_tree: An upload component that allows you to save more time playing LOL.
+:palm_tree: An upload component for Laravel.
 
 ## Installing
 
@@ -28,39 +28,76 @@
 
     ```php
     \LaravelUploader::routes();
+    
+    // custom
+    \LaravelUploader::routes([
+       'as' => 'file-upload', 
+       'middleware' => ['auth'],
+       //...
+    ]); 
     ```
 
 ## Usage
 
-1. Add the uploader component to right position of your form:
+### Custom controller
 
-    ```php
-    @uploader('images')
-    ```
+If you want to handle file upload, you can do it as simple as:
 
-    or assign form name:
+```php
+<?php
 
-    ```php
-    @uploader('images', ['name' => 'images'])
-    ```
+namespace App\Http\Controllers;
 
-    or set max files:
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Overtrue\LaravelUploader\StrategyResolver;
 
-    ```php
-    @uploader('images', ['max' => 10])
-    ```
+class MyUploadController extends BaseController
+{
+    public function upload(Request $request)
+    {
+        return StrategyResolver::resolveFromRequest($request, $request->get('strategy', 'default'))->upload();
+    }
+}
+``` 
 
-    and strategy (default: 'default'):
+### Custom Response
 
-    ```php
-    @uploader('images', ['strategy' => 'avatar'])
-    ```
+If you want update the response, you can get key information from the return value object and return a new response:
 
-2. Don't forget import uploader assets at the end of your template:
+```php
+    public function upload(Request $request)
+    {
+        $response = StrategyResolver::resolveFromRequest($request, $request->get('strategy', 'default'))->upload();
+        
+        return response()->json([
+            'status' => 'success',
+            'url' => $response->url,
+            'origin_name' => $response->originalName,
+            //...
+        ]);
+    }
+```
 
-    ```php
-    @uploader('assets')
-    ```
+You can get all these public properties:
+
+```php
+int $size;
+string $path;
+string $mime;
+string $url;
+string $relativeUrl;
+string $filename;
+string $originalName;
+\Illuminate\Http\UploadedFile   $file;
+\Overtrue\LaravelUploader\strategy $strategy;
+```
+
+## Recommend clients
+
+- [Element UI - Upload](https://element.eleme.cn/#/zh-CN/component/upload)
+- [Plupload](https://www.plupload.com/)
+- [Dropzone](https://www.dropzonejs.com/)
 
 ## PHP 扩展包开发
 

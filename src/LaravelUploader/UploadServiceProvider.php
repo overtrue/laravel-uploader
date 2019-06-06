@@ -12,7 +12,6 @@
 namespace Overtrue\LaravelUploader;
 
 use Illuminate\Support\ServiceProvider;
-use Overtrue\LaravelUploader\Services\FileUpload;
 
 /**
  * Class UploadServiceProvider.
@@ -26,14 +25,6 @@ class UploadServiceProvider extends ServiceProvider
     {
         $this->loadConfig();
         $this->loadTranslations();
-    }
-
-    /**
-     * Register any application services.
-     */
-    public function register()
-    {
-        $this->registerServices();
     }
 
     /**
@@ -56,15 +47,5 @@ class UploadServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/lang' => resource_path('lang/vendor/uploader'),
         ]);
-    }
-
-    /**
-     * Register upload services.
-     */
-    protected function registerServices()
-    {
-        $this->app->singleton(FileUpload::class, function ($app) {
-            return new FileUpload($app['filesystem']);
-        });
     }
 }

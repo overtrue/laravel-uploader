@@ -4,50 +4,124 @@
 namespace Overtrue\LaravelUploader;
 
 
-use Illuminate\Http\UploadedFile;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Fluent;
+use Overtrue\LaravelUploader\Events\FileUploaded;
+use Overtrue\LaravelUploader\Events\FileUploading;
 
+/**
+ * Class Strategy
+ */
 class Strategy
 {
+    /**
+     * @var string
+     */
     protected $disk;
-    protected $directory;
-    protected $mimes = [];
-    protected $name;
-    protected $maxFileSize = 0;
-    protected $filenameHash;
 
-    public function __construct(array $config)
+    /**
+     * @var string
+     */
+    protected $directory;
+
+    /**
+     * @var array
+     */
+    protected $mimes = [];
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var int
+     */
+    protected $maxSize = 0;
+
+    /**
+     * @var string
+     */
+    protected $filenameType;
+
+    /**
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
+
+    /**
+     * Strategy constructor.
+     *
+     * @param array                    $config
+     * @param \Illuminate\Http\Request $request
+     */
+    public function __construct(array $config, Request $request)
     {
         $config = new Fluent($config);
 
+        $this->request = $request;
         $this->disk = $config->get('disk', \config('filesystems.default'));
-        $this->directory = $config->get('directory');
         $this->mimes = $config->get('mimes', ['*']);
         $this->name = $config->get('name', 'file');
-    }
-
-    public function getInputName()
-    {
-        return $this->inputName;
+        $this->directory = $config->get('directory');
+        $this->maxSize = $config->get('max_size', 0);
+        $this->filenameType = $config->get('filename_type', 'md5_file');
     }
 
     /**
-     * @param \Illuminate\Http\UploadedFile $file
-     *
-     * @return string|null
+     * @return string
      */
-    public function getFilename(UploadedFile $file)
+    public function getName()
     {
-        switch ($this->filenameHash) {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisk()
+    {
+        return $this->disk;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getMimes()
+    {
+        return $this->mimes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxSize()
+    {
+        return $this->maxSize;
+    }
+
+    public function getFile()
+    {
+        return $this->request->file($this->name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilename()
+    {
+        switch ($this->filenameType) {
             case 'original':
-                return $file->getClientOriginalName();
+                return $this->getFile()->getClientOriginalName();
             case 'md5_file':
-                return md5_file($file->getRealPath()).'.'.$file->guessExtension();
+                return md5_file($this->getFile()->getRealPath()) . '.' . $this->getFile()->guessExtension();
 
                 break;
             case 'random':
             default:
-                return $file->hashName();
+                return $this->getFile()->hashName();
         }
     }
 
@@ -60,13 +134,65 @@ class Strategy
     }
 
     /**
-     * @param string $mime
-     *
      * @return bool
      */
-    public function isValidMime(string $mime)
+    public function isValidMime()
     {
-        return $this->mimes === ['*'] || \in_array($mime, $this->mimes);
+        return $this->mimes === ['*'] || \in_array($this->getFile()->getClientMimeType(), $this->mimes);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidSize()
+    {
+        return $this->getFile()->getSize() <= $this->maxSize || $this->maxSize === 0;
+    }
+
+    public function validate()
+    {
+        if (!$this->request->hasFile($this->getName())) {
+            \abort(422, 'no file found.');
+        }
+
+        $file = $this->getFile();
+
+        if (!$this->isValidMime($file->getClientMimeType())) {
+            \abort(422, \sprintf('Invalid mime "%s".', $file->getClientMimeType()));
+        }
+
+        if (!$this->isValidSize($file->getSize())) {
+            \abort(422, \sprintf('File has too large size("%s").', $file->getSize()));
+        }
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return \Overtrue\LaravelUploader\Response
+     */
+    public function upload(array $options = [])
+    {
+        $this->validate();
+
+        $file = $this->getFile();
+
+        $path = \sprintf('%s/%s', \rtrim($this->directory, '/'), $this->getFilename($file));
+
+        $stream = fopen($file->getRealPath(), 'r');
+
+        Event::dispatch(new FileUploading($file));
+
+        $result = Storage::disk($this->disk)->put($path, $stream, $options);
+        $response = new Response($result ? $path : false, $this, $file);
+
+        Event::dispatch(new FileUploaded($file, $response, $this));
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
+        return $response;
     }
 
     /**
@@ -76,7 +202,7 @@ class Strategy
      *
      * @return string
      */
-    protected function formatDir($dir)
+    protected function formatDirectory($dir)
     {
         $replacements = [
             '{Y}' => date('Y'),
@@ -84,6 +210,7 @@ class Strategy
             '{d}' => date('d'),
             '{H}' => date('H'),
             '{i}' => date('i'),
+            '{s}' => date('s'),
         ];
 
         return str_replace(array_keys($replacements), $replacements, $dir);

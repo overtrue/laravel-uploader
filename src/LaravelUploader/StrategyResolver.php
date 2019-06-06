@@ -3,21 +3,27 @@
 
 namespace Overtrue\LaravelUploader;
 
+use Illuminate\Http\Request;
+
 /**
  * Class StrategyResolver
  */
 class StrategyResolver
 {
     /**
-     * @param string|null $name
+     * @param \Illuminate\Http\Request $request
+     * @param string|null              $name
      *
      * @return \Overtrue\LaravelUploader\Strategy
      */
-    public static function resolve(string $name = null)
+    public static function resolveFromRequest(Request $request, string $name = null)
     {
-        $config = static::recursiveMergeConfig(config('uploader.strategies.default', []), config('uploader.strategies.'.$name, []));
+        $config = static::recursiveMergeConfig(
+            config('uploader.strategies.default', []),
+            config("uploader.strategies.{$name}", [])
+        );
 
-        return new Strategy($config);
+        return new Strategy($config, $request);
     }
 
     /**
@@ -34,7 +40,7 @@ class StrategyResolver
 
         foreach ($array2 as $key => &$value) {
             if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
-                $merged[$key] = $this->recursiveMergeConfig($merged[$key], $value);
+                $merged[$key] = \forward_static_call(__FUNCTION__, $merged[$key], $value);
             } else {
                 $merged[$key] = $value;
             }
