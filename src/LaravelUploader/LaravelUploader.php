@@ -12,16 +12,28 @@
 namespace Overtrue\LaravelUploader;
 
 use Illuminate\Support\Facades\Facade;
+use Overtrue\LaravelUploader\Http\Controllers\UploadController;
 
+/**
+ * Class LaravelUploader.
+ */
 class LaravelUploader extends Facade
 {
-    public static function routes()
+    /**
+     * @param array $options
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public static function routes(array $options = [])
     {
         if (!self::$app->routesAreCached()) {
-            self::$app->make('router')->post('files/upload', [
-                'uses' => '\Overtrue\LaravelUploader\Http\Controllers\UploadController@upload',
-                'as' => 'file.upload',
-            ]);
+            self::$app->make('router')->post(
+                'files/upload',
+                \array_merge([
+                    'uses' => UploadController::class,
+                    'as' => 'file.upload',
+                ], $options)
+            );
         }
     }
 }

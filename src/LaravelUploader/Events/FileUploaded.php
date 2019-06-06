@@ -12,6 +12,8 @@
 namespace Overtrue\LaravelUploader\Events;
 
 use Illuminate\Http\UploadedFile;
+use Overtrue\LaravelUploader\Response;
+use Overtrue\LaravelUploader\Strategy;
 
 class FileUploaded
 {
@@ -20,14 +22,14 @@ class FileUploaded
     /**
      * The result of the uploaded file.
      *
-     * @var array
+     * @var \Overtrue\LaravelUploader\Response
      */
-    public $result;
+    public $response;
 
     /**
      * The strategy of the uploaded file.
      *
-     * @var string
+     * @var \Overtrue\LaravelUploader\Strategy
      */
     public $strategy;
 
@@ -41,16 +43,14 @@ class FileUploaded
     /**
      * Create a new event instance.
      *
-     * @param \Illuminate\Http\UploadedFile           $file
-     * @param array                                   $result
-     * @param \Overtrue\LaravelUploader\Events\string $strategy
-     * @param array                                   $config
+     * @param \Illuminate\Http\UploadedFile      $file
+     * @param \Overtrue\LaravelUploader\Response $response
+     * @param \Overtrue\LaravelUploader\Strategy $strategy
      */
-    public function __construct(UploadedFile $file, array $result, string $strategy, array $config)
+    public function __construct(UploadedFile $file, Response $response, Strategy $strategy)
     {
         $this->file = $file;
-        $this->result = $result;
+        $this->response = $response;
         $this->strategy = $strategy;
-        $this->config = $config;
     }
 }
