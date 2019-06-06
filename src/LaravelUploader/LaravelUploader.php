@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Facade;
 use Overtrue\LaravelUploader\Http\Controllers\UploadController;
 
 /**
- * Class LaravelUploader
+ * Class LaravelUploader.
  */
 class LaravelUploader extends Facade
 {

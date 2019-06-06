@@ -15,22 +15,22 @@ return [
          * default strategy.
          */
         'default' => [
-            /**
+            /*
              * The form name for file.
              */
             'name' => 'file',
 
-            /**
+            /*
              * Allowed MIME types.
              */
             'mimes' => ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'],
 
-            /**
+            /*
              * The disk name to store file, the value is key of `disks` in `config/filesystems.php`
              */
             'disk' => 'public',
 
-            /**
+            /*
              * Default directory template.
              * Variables:
              *  - `Y`   Year, example: 2019
@@ -42,12 +42,12 @@ return [
              */
             'directory' => 'uploads/{Y}/{m}/{d}',
 
-            /**
+            /*
              * File size limit
              */
             'max_size' => '2m',
 
-            /**
+            /*
              * Strategy of filename.
              *
              * Available:
@@ -58,7 +58,7 @@ return [
             'filename_type' => 'md5_file',
         ],
 
-        /**
+        /*
          * You can create custom strategy to override the default strategy.
          */
         'avatar' => [

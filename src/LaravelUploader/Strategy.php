@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * This file is part of the overtrue/laravel-uploader.
+ *
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Overtrue\LaravelUploader;
-
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
@@ -12,7 +19,7 @@ use Overtrue\LaravelUploader\Events\FileUploaded;
 use Overtrue\LaravelUploader\Events\FileUploading;
 
 /**
- * Class Strategy
+ * Class Strategy.
  */
 class Strategy
 {
@@ -116,7 +123,7 @@ class Strategy
             case 'original':
                 return $this->getFile()->getClientOriginalName();
             case 'md5_file':
-                return md5_file($this->getFile()->getRealPath()) . '.' . $this->getFile()->guessExtension();
+                return md5_file($this->getFile()->getRealPath()).'.'.$this->getFile()->guessExtension();
 
                 break;
             case 'random':
@@ -146,7 +153,7 @@ class Strategy
      */
     public function isValidSize()
     {
-        return $this->getFile()->getSize() <= $this->maxSize || $this->maxSize === 0;
+        return $this->getFile()->getSize() <= $this->maxSize || 0 === $this->maxSize;
     }
 
     public function validate()
