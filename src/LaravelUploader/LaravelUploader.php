@@ -12,7 +12,6 @@
 namespace Overtrue\LaravelUploader;
 
 use Illuminate\Support\Facades\Facade;
-use Overtrue\LaravelUploader\Http\Controllers\UploadController;
 
 /**
  * Class LaravelUploader.
@@ -30,7 +29,7 @@ class LaravelUploader extends Facade
             self::$app->make('router')->post(
                 'files/upload',
                 \array_merge([
-                    'uses' => UploadController::class,
+                    'uses' => '\Overtrue\LaravelUploader\Http\Controllers\UploadController',
                     'as' => 'file.upload',
                 ], $options)
             );
