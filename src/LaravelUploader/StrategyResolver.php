@@ -48,7 +48,7 @@ class StrategyResolver
 
         foreach ($array2 as $key => &$value) {
             if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
-                $merged[$key] = \forward_static_call(__FUNCTION__, $merged[$key], $value);
+                $merged[$key] = \forward_static_call(\sprintf('%s::%s', __CLASS__, __FUNCTION__), $merged[$key], $value);
             } else {
                 $merged[$key] = $value;
             }
