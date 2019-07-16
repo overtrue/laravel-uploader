@@ -123,7 +123,7 @@ class Strategy
             case 'original':
                 return $this->getFile()->getClientOriginalName();
             case 'md5_file':
-                return md5_file($this->getFile()->getRealPath()).'.'.$this->getFile()->guessExtension();
+                return md5_file($this->getFile()->getRealPath()).'.'.$this->getFile()->getClientOriginalExtension();
 
                 break;
             case 'random':
@@ -153,7 +153,9 @@ class Strategy
      */
     public function isValidSize()
     {
-        return $this->getFile()->getSize() <= $this->maxSize || 0 === $this->maxSize;
+        $maxSize = $this->filesize2bytes($this->maxSize);
+
+        return $this->getFile()->getSize() <= $maxSize || 0 === $maxSize;
     }
 
     public function validate()
@@ -184,7 +186,7 @@ class Strategy
 
         $file = $this->getFile();
 
-        $path = \sprintf('%s/%s', \rtrim($this->directory, '/'), $this->getFilename($file));
+        $path = \sprintf('%s/%s', \rtrim($this->formatDirectory($this->directory), '/'), $this->getFilename($file));
 
         $stream = fopen($file->getRealPath(), 'r');
 
@@ -221,5 +223,31 @@ class Strategy
         ];
 
         return str_replace(array_keys($replacements), $replacements, $dir);
+    }
+
+    /**
+     * @param string $humanFileSize
+     *
+     * @return int
+     */
+    protected function filesize2bytes($humanFileSize)
+    {
+        $bytes = 0;
+
+        $bytesUnits = array(
+            'K' => 1024,
+            'M' => 1024 * 1024,
+            'G' => 1024 * 1024 * 1024,
+            'T' => 1024 * 1024 * 1024 * 1024,
+            'P' => 1024 * 1024 * 1024 * 1024 * 1024,
+        );
+
+        $bytes = floatval($humanFileSize);
+
+        if (preg_match('~([KMGTP])$~si', rtrim($humanFileSize, 'B'), $matches) && !empty($bytesUnits[\strtoupper($matches[1])])) {
+            $bytes *= $bytesUnits[\strtoupper($matches[1])];
+        }
+
+        return intval(round($bytes, 2));
     }
 }
