@@ -31,7 +31,7 @@
     
     // custom
     \LaravelUploader::routes([
-       'as' => 'file-upload', 
+       'as' => 'files.upload', 
        'middleware' => ['auth'],
        //...
     ]); 
