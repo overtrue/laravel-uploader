@@ -111,6 +111,7 @@ class Response implements Jsonable, Arrayable
             'url' => $this->url,
             'filename' => $this->filename,
             'relative_url' => $this->relativeUrl,
+            'location' => $this->relativeUrl,
             'original_name' => $this->originalName,
         ];
     }
