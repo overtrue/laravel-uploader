@@ -21,6 +21,11 @@ class Response implements Jsonable, Arrayable
     /**
      * @var string
      */
+    public $disk;
+
+    /**
+     * @var string
+     */
     public $path;
 
     /**
@@ -61,6 +66,11 @@ class Response implements Jsonable, Arrayable
     /**
      * @var string
      */
+    public $extension;
+
+    /**
+     * @var string
+     */
     public $originalName;
 
     /**
@@ -74,15 +84,15 @@ class Response implements Jsonable, Arrayable
     {
         $this->path = $path;
         $this->file = $file;
+        $this->disk = $strategy->getDisk();
         $this->strategy = $strategy;
-
-        $disk = Storage::disk($this->strategy->getDisk());
         $this->filename = \basename($path);
+        $this->extension = $file->getClientOriginalExtension();
         $this->originalName = $file->getClientOriginalName();
         $this->mime = $file->getClientMimeType();
         $this->size = $file->getSize();
-        $this->relativeUrl = str_replace(config('app.url'), '', $disk->url($path));
-        $this->url = $disk->url($this->path);
+        $this->url = Storage::disk($this->strategy->getDisk())->url($this->path);
+        $this->relativeUrl = str_replace(config('app.url'), '', $this->url);
     }
 
     /**
@@ -109,10 +119,13 @@ class Response implements Jsonable, Arrayable
             'size' => $this->size,
             'path' => $this->path,
             'url' => $this->url,
+            'disk' => $this->disk,
             'filename' => $this->filename,
+            'extension' => $this->extension,
             'relative_url' => $this->relativeUrl,
             'location' => $this->relativeUrl,
             'original_name' => $this->originalName,
+            'strategy' => $this->strategy->getName(),
         ];
     }
 }
