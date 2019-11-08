@@ -10,12 +10,12 @@
  */
 
 return [
-    /**
+    /*
      * Base uri for $response->url
      */
     'base_uri' => env('APP_URL'),
 
-    /**
+    /*
      * Strategies
      */
     'strategies' => [
