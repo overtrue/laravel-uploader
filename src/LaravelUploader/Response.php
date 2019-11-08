@@ -91,8 +91,8 @@ class Response implements Jsonable, Arrayable
         $this->originalName = $file->getClientOriginalName();
         $this->mime = $file->getClientMimeType();
         $this->size = $file->getSize();
-        $this->url = Storage::disk($this->strategy->getDisk())->url($this->path);
-        $this->relativeUrl = str_replace(config('app.url'), '', $this->url);
+        $this->url = \sprintf('%s/%s', rtrim(config('uploader.base_uri'), '/'), $path);
+        $this->relativeUrl = $path;
     }
 
     /**
