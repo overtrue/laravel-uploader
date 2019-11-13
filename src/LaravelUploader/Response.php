@@ -87,7 +87,7 @@ class Response implements Jsonable, Arrayable
 
         if ($baseUri) {
             $url = \sprintf('%s/%s', $baseUri, $path);
-        } elseif(\is_callable($disk, 'url')) {
+        } elseif (\is_callable($disk, 'url')) {
             $url = $disk->url($this->path);
         }
 
