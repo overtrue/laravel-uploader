@@ -81,6 +81,16 @@ class Response implements Jsonable, Arrayable
      */
     public function __construct(string $path, Strategy $strategy, UploadedFile $file)
     {
+        $disk = Storage::disk($this->strategy->getDisk());
+        $baseUri = rtrim(config('uploader.base_uri'), '/');
+        $url = $path;
+
+        if ($baseUri) {
+            $url = \sprintf('%s/%s', $baseUri, $path);
+        } elseif(\is_callable($disk, 'url')) {
+            $url = $disk->url($this->path);
+        }
+
         $this->path = $path;
         $this->file = $file;
         $this->disk = $strategy->getDisk();
@@ -90,7 +100,7 @@ class Response implements Jsonable, Arrayable
         $this->originalName = $file->getClientOriginalName();
         $this->mime = $file->getClientMimeType();
         $this->size = $file->getSize();
-        $this->url = \sprintf('%s/%s', rtrim(config('uploader.base_uri'), '/'), $path);
+        $this->url = $url;
         $this->relativeUrl = $path;
     }
 
