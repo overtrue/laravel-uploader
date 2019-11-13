@@ -14,6 +14,7 @@ namespace Overtrue\LaravelUploader;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class Response implements Jsonable, Arrayable
 {
