@@ -82,9 +82,9 @@ class Response implements Jsonable, Arrayable
      */
     public function __construct(string $path, Strategy $strategy, UploadedFile $file)
     {
-        $disk = Storage::disk($this->strategy->getDisk());
+        $disk = Storage::disk($strategy->getDisk());
         $baseUri = rtrim(config('uploader.base_uri'), '/');
-        $url = $path;
+        $url = url($path);
 
         if ($baseUri) {
             $url = \sprintf('%s/%s', $baseUri, $path);
