@@ -84,9 +84,11 @@ class Response implements Jsonable, Arrayable
     {
         $disk = Storage::disk($strategy->getDisk());
         $baseUri = rtrim(config('uploader.base_uri'), '/');
+        $driver = config('filesystems.disks.%s.driver', $strategy->getDisk());
+        $relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
         $url = url($path);
 
-        if ($baseUri) {
+        if ($baseUri && $driver !== 'local') {
             $url = \sprintf('%s/%s', $baseUri, $path);
         } elseif (method_exists($disk, 'url')) {
             $url = $disk->url($path);
@@ -102,7 +104,7 @@ class Response implements Jsonable, Arrayable
         $this->mime = $file->getClientMimeType();
         $this->size = $file->getSize();
         $this->url = $url;
-        $this->relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
+        $this->relativeUrl = $relativeUrl;
     }
 
     /**
@@ -133,7 +135,7 @@ class Response implements Jsonable, Arrayable
             'filename' => $this->filename,
             'extension' => $this->extension,
             'relative_url' => $this->relativeUrl,
-            'location' => $this->disk == 'local' ? Storage::url($this->path) : $this->path,
+            'location' => $this->url,
             'original_name' => $this->originalName,
             'strategy' => $this->strategy->getName(),
         ];
