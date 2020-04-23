@@ -88,7 +88,7 @@ class Response implements Jsonable, Arrayable
         $relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
         $url = url($path);
 
-        if ($baseUri && $driver !== 'local') {
+        if ($baseUri && 'local' !== $driver) {
             $url = \sprintf('%s/%s', $baseUri, $path);
         } elseif (method_exists($disk, 'url')) {
             $url = $disk->url($path);
