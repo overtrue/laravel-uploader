@@ -133,7 +133,7 @@ class Response implements Jsonable, Arrayable
             'filename' => $this->filename,
             'extension' => $this->extension,
             'relative_url' => $this->relativeUrl,
-            'location' => $this->disk == 'local' ? Storage::url($this->path) : $this->path,
+            'location' => 'local' == $this->disk ? Storage::url($this->path) : $this->path,
             'original_name' => $this->originalName,
             'strategy' => $this->strategy->getName(),
         ];
