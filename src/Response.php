@@ -86,7 +86,7 @@ class Response implements Jsonable, Arrayable
         $baseUri = rtrim(config('uploader.base_uri'), '/');
         $url = url($path);
 
-        if ($baseUri) {
+        if ($baseUri && $strategy->getDisk() != 'local') {
             $url = \sprintf('%s/%s', $baseUri, $path);
         } elseif (method_exists($disk, 'url')) {
             $url = $disk->url($path);
