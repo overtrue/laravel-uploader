@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Overtrue\\LaravelUploader\\": "src/LaravelUploader"
+      "Overtrue\\LaravelUploader\\": "src"
     }
   },
   "extra": {
