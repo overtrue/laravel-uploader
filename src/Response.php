@@ -102,7 +102,7 @@ class Response implements Jsonable, Arrayable
         $this->mime = $file->getClientMimeType();
         $this->size = $file->getSize();
         $this->url = $url;
-        $this->relativeUrl = $path;
+        $this->relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
     }
 
     /**
