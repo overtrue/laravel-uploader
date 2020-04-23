@@ -86,7 +86,7 @@ class Response implements Jsonable, Arrayable
         $baseUri = rtrim(config('uploader.base_uri'), '/');
         $url = url($path);
 
-        if ($baseUri && $strategy->getDisk() != 'local') {
+        if ($baseUri) {
             $url = \sprintf('%s/%s', $baseUri, $path);
         } elseif (method_exists($disk, 'url')) {
             $url = $disk->url($path);
@@ -133,7 +133,7 @@ class Response implements Jsonable, Arrayable
             'filename' => $this->filename,
             'extension' => $this->extension,
             'relative_url' => $this->relativeUrl,
-            'location' => $this->relativeUrl,
+            'location' => $this->disk == 'local' ? Storage::url($this->path) : $this->path,
             'original_name' => $this->originalName,
             'strategy' => $this->strategy->getName(),
         ];
