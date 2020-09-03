@@ -90,7 +90,7 @@ string $relativeUrl;
 string $filename;
 string $originalName;
 \Illuminate\Http\UploadedFile   $file;
-\Overtrue\LaravelUploader\strategy $strategy;
+\Overtrue\LaravelUploader\Strategy $strategy;
 ```
 
 ## Recommend clients
