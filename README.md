@@ -4,16 +4,10 @@
 
 ## Installing
 
-1. register provider and configuration.
+1. install package: 
+
     ```sh
     $ composer require overtrue/laravel-uploader -vvv
-    ```
-
-    then register the package service provider, add the following line to `providers` section of `config/app.php`:
-
-
-    ```php
-    Overtrue\LaravelUploader\UploadServiceProvider::class,
     ```
 
     and publish the assets using command:
