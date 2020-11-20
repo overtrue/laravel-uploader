@@ -112,7 +112,7 @@ class Strategy
      */
     public function isValidSize()
     {
-        return $this->file->getSize() <= $maxSize || 0 === $maxSize;
+        return $this->file->getSize() <= $this->maxSize || 0 === $this->maxSize;
     }
 
     public function validate()
