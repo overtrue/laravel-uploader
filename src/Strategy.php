@@ -117,10 +117,6 @@ class Strategy
 
     public function validate()
     {
-        if (!$this->file->isValid()) {
-            \abort(422, 'no file found.');
-        }
-
         if (!$this->isValidMime()) {
             \abort(422, \sprintf('Invalid mime "%s".', $this->file->getClientMimeType()));
         }
