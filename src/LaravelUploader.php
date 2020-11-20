@@ -1,27 +1,16 @@
 <?php
 
-/*
- * This file is part of the overtrue/laravel-uploader.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Overtrue\LaravelUploader;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Facade;
 
-/**
- * Class LaravelUploader.
- */
 class LaravelUploader extends Facade
 {
     /**
      * @param array $options
      *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     public static function routes(array $options = [])
     {

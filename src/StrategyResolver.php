@@ -1,21 +1,9 @@
 <?php
 
-/*
- * This file is part of the overtrue/laravel-uploader.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Overtrue\LaravelUploader;
 
 use Illuminate\Http\Request;
 
-/**
- * Class StrategyResolver.
- */
 class StrategyResolver
 {
     /**
@@ -26,34 +14,15 @@ class StrategyResolver
      */
     public static function resolveFromRequest(Request $request, string $name = null)
     {
-        $config = static::recursiveMergeConfig(
+        $config = \array_replace_recursive(
             config('uploader.strategies.default', []),
             config("uploader.strategies.{$name}", [])
         );
 
-        return new Strategy($config, $request);
-    }
+        $formName = $config['name'] ?? 'file';
 
-    /**
-     * Array merge recursive distinct.
-     *
-     * @param array &$array1
-     * @param array &$array2
-     *
-     * @return array
-     */
-    protected static function recursiveMergeConfig(array $array1, array $array2)
-    {
-        $merged = $array1;
+        \abort_if(!$request->hasFile($formName), 422, \sprintf('No file "%s" uploaded.', $formName));
 
-        foreach ($array2 as $key => &$value) {
-            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
-                $merged[$key] = \forward_static_call(\sprintf('%s::%s', __CLASS__, __FUNCTION__), $merged[$key], $value);
-            } else {
-                $merged[$key] = $value;
-            }
-        }
-
-        return $merged;
+        return new Strategy($config, $request->file($formName));
     }
 }

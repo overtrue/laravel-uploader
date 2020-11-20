@@ -15,9 +15,6 @@ return [
      */
     'base_uri' => null,
 
-    /*
-     * Strategies
-     */
     'strategies' => [
         /*
          * default strategy.
@@ -36,7 +33,7 @@ return [
             /*
              * The disk name to store file, the value is key of `disks` in `config/filesystems.php`
              */
-            'disk' => 'public',
+            'disk' => env('FILESYSTEM_DRIVER', 'public'),
 
             /*
              * Default directory template.

@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the overtrue/laravel-uploader.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Overtrue\LaravelUploader;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -18,64 +9,19 @@ use Illuminate\Support\Facades\Storage;
 
 class Response implements Jsonable, Arrayable
 {
-    /**
-     * @var string
-     */
-    public $disk;
+    public string $disk;
+    public string $path;
+    public ?string $mime;
+    public string $size;
+    public string $url;
+    public string $relativeUrl;
+    public string $filename;
+    public string $extension;
+    public string $originalName;
+    public UploadedFile $file;
+    public Strategy $strategy;
 
     /**
-     * @var string
-     */
-    public $path;
-
-    /**
-     * @var \Illuminate\Http\UploadedFile
-     */
-    public $file;
-
-    /**
-     * @var \Overtrue\LaravelUploader\Strategy
-     */
-    public $strategy;
-
-    /**
-     * @var string
-     */
-    public $mime;
-
-    /**
-     * @var string
-     */
-    public $size;
-
-    /**
-     * @var string
-     */
-    public $url;
-
-    /**
-     * @var string
-     */
-    public $relativeUrl;
-
-    /**
-     * @var string
-     */
-    public $filename;
-
-    /**
-     * @var string
-     */
-    public $extension;
-
-    /**
-     * @var string
-     */
-    public $originalName;
-
-    /**
-     * Response constructor.
-     *
      * @param string                             $path
      * @param \Overtrue\LaravelUploader\Strategy $strategy
      * @param \Illuminate\Http\UploadedFile      $file
@@ -108,8 +54,6 @@ class Response implements Jsonable, Arrayable
     }
 
     /**
-     * Convert the object to its JSON representation.
-     *
      * @param int $options
      *
      * @return string
@@ -120,8 +64,6 @@ class Response implements Jsonable, Arrayable
     }
 
     /**
-     * Get the instance as an array.
-     *
      * @return array
      */
     public function toArray()
