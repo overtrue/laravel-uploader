@@ -137,9 +137,9 @@ class Strategy
 
         $path = \sprintf('%s/%s', \rtrim($this->formatDirectory($this->directory), '/'), $this->getFilename());
 
-        $stream = fopen($this->file->getRealPath(), 'r');
-
         Event::dispatch(new FileUploading($this->file));
+
+        $stream = fopen($this->file->getRealPath(), 'r');
 
         $result = Storage::disk($this->disk)->put($path, $stream, $options);
         $response = new Response($result ? $path : false, $this, $this->file);
