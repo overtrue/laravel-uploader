@@ -19,7 +19,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
-    "friendsofphp/php-cs-fixer": "^2.16",
+    "friendsofphp/php-cs-fixer": "^3.0",
     "brainmaestro/composer-git-hooks": "^2.8"
   },
   "extra": {
