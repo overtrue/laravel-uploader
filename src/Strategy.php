@@ -2,6 +2,7 @@
 
 namespace Overtrue\LaravelUploader;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
@@ -17,13 +18,14 @@ class Strategy
     protected string $name;
     protected int $maxSize = 0;
     protected string $filenameType;
+    protected string $customDirectory;
     protected UploadedFile $file;
 
     /**
      * @param  array  $config
      * @param  UploadedFile  $file
      */
-    public function __construct(array $config, UploadedFile $file)
+    public function __construct(array $config, UploadedFile $file, Request $request)
     {
         $config = new Fluent($config);
 
@@ -34,6 +36,8 @@ class Strategy
         $this->directory = $config->get('directory');
         $this->maxSize = $this->filesize2bytes($config->get('max_size', 0));
         $this->filenameType = $config->get('filename_type', 'md5_file');
+
+        $this->customDirectory = $request->attributes->get('custom_directory', '');
     }
 
     /**
@@ -100,6 +104,40 @@ class Strategy
     }
 
     /**
+     * @return string
+     */
+    public function getCustomDirectory()
+    {
+        return $this->customDirectory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCustomDirectory()
+    {
+        return !empty($this->getCustomDirectory());
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirectoryWithCustom()
+    {
+        return sprintf('%s/%s', rtrim($this->getDirectory(), '/'), trim($this->getCustomDirectory(), '/'));
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        $dir = $this->hasCustomDirectory() ? $this->getDirectoryWithCustom() : $this->getDirectory();
+
+        return \sprintf('%s/%s', \rtrim($this->formatDirectory($dir), '/'), $this->getFilename());
+    }
+
+    /**
      * @return bool
      */
     public function isValidMime()
@@ -135,7 +173,7 @@ class Strategy
     {
         $this->validate();
 
-        $path = \sprintf('%s/%s', \rtrim($this->formatDirectory($this->directory), '/'), $this->getFilename());
+        $path = $this->getPath();
 
         Event::dispatch(new FileUploading($this->file));
 

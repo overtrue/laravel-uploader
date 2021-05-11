@@ -25,6 +25,6 @@ class StrategyResolver
 
         \abort_if(!$request->hasFile($formName), 422, \sprintf('No file "%s" uploaded.', $formName));
 
-        return new Strategy($config, $request->file($formName));
+        return new Strategy($config, $request->file($formName), $request);
     }
 }
