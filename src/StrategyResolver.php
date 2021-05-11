@@ -14,6 +14,8 @@ class StrategyResolver
      */
     public static function resolveFromRequest(Request $request, string $name = null)
     {
+        \abort_if(is_null(config("uploader.strategies.{$name}")), 422, \sprintf('No strategy "%s" was found.', $name));
+
         $config = \array_replace_recursive(
             config('uploader.strategies.default', []),
             config("uploader.strategies.{$name}", [])
