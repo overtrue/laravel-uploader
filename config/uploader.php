@@ -16,9 +16,6 @@ return [
     'base_uri' => null,
 
     'strategies' => [
-        /*
-         * default strategy.
-         */
         'default' => [
             /*
              * The form name for file.

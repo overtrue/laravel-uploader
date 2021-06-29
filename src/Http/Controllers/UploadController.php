@@ -13,7 +13,7 @@ class UploadController extends BaseController
      *
      * @param Request $request
      *
-     * @return \Overtrue\LaravelUploader\Response
+     * @return \Overtrue\LaravelUploader\Result
      */
     public function __invoke(Request $request)
     {

@@ -9,4 +9,4 @@
 phpunit.php export-ignore
 phpunit.xml export-ignore
 phpunit.xml.dist export-ignore
-.php_cs  export-ignore
+.php-cs-fixer.php  export-ignore

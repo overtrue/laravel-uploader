@@ -6,10 +6,11 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use JetBrains\PhpStorm\Pure;
 
-class Response implements Jsonable, Arrayable
+class Result implements Jsonable, Arrayable
 {
-    public string $disk;
+    public array $disks;
     public string $path;
     public ?string $mime;
     public string $size;
@@ -21,16 +22,11 @@ class Response implements Jsonable, Arrayable
     public UploadedFile $file;
     public Strategy $strategy;
 
-    /**
-     * @param string                             $path
-     * @param \Overtrue\LaravelUploader\Strategy $strategy
-     * @param \Illuminate\Http\UploadedFile      $file
-     */
     public function __construct(string $path, Strategy $strategy, UploadedFile $file)
     {
-        $disk = Storage::disk($strategy->getDisk());
+        $disk = Storage::disk($strategy->getDisks()[0]);
         $baseUri = rtrim(config('uploader.base_uri'), '/');
-        $driver = config('filesystems.disks.%s.driver', $strategy->getDisk());
+        $driver = config('filesystems.disks.%s.driver', $strategy->getDisks());
         $relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
         $url = url($path);
 
@@ -42,7 +38,7 @@ class Response implements Jsonable, Arrayable
 
         $this->path = $path;
         $this->file = $file;
-        $this->disk = $strategy->getDisk();
+        $this->disks = $strategy->getDisks();
         $this->strategy = $strategy;
         $this->filename = \basename($path);
         $this->extension = $file->getClientOriginalExtension();
@@ -53,33 +49,26 @@ class Response implements Jsonable, Arrayable
         $this->relativeUrl = $relativeUrl;
     }
 
-    /**
-     * @param int $options
-     *
-     * @return string
-     */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return \json_encode($this->toArray());
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    #[Pure]
+    public function toArray(): array
     {
         return [
             'mime' => $this->mime,
             'size' => $this->size,
             'path' => $this->path,
             'url' => $this->url,
-            'disk' => $this->disk,
+            'disk' => $this->disks,
             'filename' => $this->filename,
             'extension' => $this->extension,
             'relative_url' => $this->relativeUrl,
             'location' => $this->url,
             'original_name' => $this->originalName,
-            'strategy' => $this->strategy->getName(),
+            'strategy' => $this->strategy->getFormName(),
         ];
     }
 }

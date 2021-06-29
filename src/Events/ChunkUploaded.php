@@ -3,12 +3,14 @@
 namespace Overtrue\LaravelUploader\Events;
 
 use Illuminate\Http\UploadedFile;
+use Overtrue\LaravelUploader\Result;
 use Overtrue\LaravelUploader\Strategy;
 
-class FileUploading
+class ChunkUploaded
 {
     public function __construct(
-        public UploadedFile $file,
+        public UploadedFile $chunk,
+        public Result $response,
         public Strategy $strategy
     ) {
     }

@@ -5,8 +5,13 @@ namespace Overtrue\LaravelUploader;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Facade;
 
-class LaravelUploader extends Facade
+class Uploader extends Facade
 {
+    protected static function getFacadeAccessor()
+    {
+        return 'uploader';
+    }
+
     /**
      * @param array $options
      *
@@ -18,9 +23,9 @@ class LaravelUploader extends Facade
             self::$app->make('router')->post(
                 'files/upload',
                 \array_merge([
-                    'uses' => '\Overtrue\LaravelUploader\Http\Controllers\UploadController',
-                    'as' => 'file.upload',
-                ], $options)
+                                 'uses' => '\Overtrue\LaravelUploader\Http\Controllers\UploadController',
+                                 'as' => 'file.upload',
+                             ], $options)
             );
         }
     }
