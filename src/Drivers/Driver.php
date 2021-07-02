@@ -19,7 +19,7 @@ abstract class Driver implements HandlerInterface
     public function resolveResult(Result $result): array
     {
         return [
-            'disk' => $result->getDisk(),
+            'size' => $result->getFile()->getSize(),
             'path' => $result->getPath(),
             'filename' => \basename($result->getPath()),
             'original_name' => $result->getFile()->getClientOriginalName()

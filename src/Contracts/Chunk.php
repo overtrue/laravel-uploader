@@ -8,6 +8,7 @@ interface Chunk
 {
     public function getIndex(): int;
     public function isLast(): bool;
-    public function getFile(): UploadedFile;
+    public function getChunkFile(): UploadedFile;
+    public function getFileSize(): int;
     public function getFileOriginalName(): string;
 }

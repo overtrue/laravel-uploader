@@ -20,6 +20,7 @@ class Chunk extends Driver implements ChunkDriverInterface
     {
         return new ChunkObject(
             $this->getFile($request, $config),
+            $this->getFileSize($request),
             $this->getCurrentIndex($request),
             $this->isLastChunk($request),
             $this->getFileOriginalName($request),
@@ -39,5 +40,10 @@ class Chunk extends Driver implements ChunkDriverInterface
     public function getFileOriginalName(Request $request)
     {
         return $request->get('original_name');
+    }
+
+    public function getFileSize(Request $request)
+    {
+        return $request->get('total_size');
     }
 }

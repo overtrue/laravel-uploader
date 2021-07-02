@@ -24,12 +24,18 @@ class UploadManager
         return $this->performSingleUpload(file: $request->file($strategy->getFormName()), strategy: $strategy);
     }
 
-    public function uploadFromFile(string $path, string | Strategy $strategy)
+    public function uploadFromFile(string $path, string | Strategy $strategy, ?string $filename = null): Result
     {
+        $file = new UploadedFile($path, $filename ?? \basename($path), null, null, true);
+
+        return $this->performSingleUpload(file: $file, strategy: $strategy);
     }
 
-    public function uploadFromContents(string $contents, string | Strategy $strategy)
+    public function uploadFromContents(string $contents, string $filename, string | Strategy $strategy): Result
     {
+        $file = UploadedFile::fake()->createWithContent($filename ?? 'noname', $contents);
+
+        return $this->performSingleUpload(file: $file, strategy: $strategy);
     }
 
     public function performSingleUpload(UploadedFile $file, Strategy $strategy): Result
@@ -53,12 +59,12 @@ class UploadManager
 
         Event::dispatch(new ChunkUploading(chunk: $chunk, strategy: $strategy));
 
-        $result = $this->saveFile($chunk->getFile(), $strategy, $path);
+        $result = $this->saveFile($chunk->getChunkFile(), $strategy, $path);
 
         Event::dispatch(new ChunkUploaded(chunk: $chunk, result: $result, strategy: $strategy));
 
         if ($chunk->isLast()) {
-            $file = ChunkMerger::merge(\dirname($path), $strategy->getDisk());
+            $file = ChunkMerger::merge($directory, $strategy->getChunkDisk());
             $uploadedFile = new UploadedFile($file->getPath(), $chunk->getFileOriginalName(), null, null, true);
 
             return $this->performSingleUpload($uploadedFile, $strategy);

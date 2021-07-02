@@ -10,6 +10,6 @@ class ChunkResult extends Result
         public Chunk $chunk,
         public int $percentage
     ) {
-        parent::__construct($disk, $path, $this->chunk->getFile());
+        parent::__construct($disk, $path, $this->chunk->getChunkFile());
     }
 }

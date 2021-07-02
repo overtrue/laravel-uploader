@@ -9,10 +9,11 @@ use Overtrue\LaravelUploader\Contracts\Chunk as ChunkInterface;
 class Chunk implements ChunkInterface
 {
     public function __construct(
-        protected UploadedFile $file,
+        protected UploadedFile $chunkFile,
         protected string $originalName,
+        protected int $fileSize,
         protected int $index,
-        protected bool $isLast
+        protected bool $isLast,
     ) {
     }
 
@@ -26,9 +27,14 @@ class Chunk implements ChunkInterface
         return $this->isLast();
     }
 
-    public function getFile(): UploadedFile
+    public function getChunkFile(): UploadedFile
     {
-        return $this->file;
+        return $this->chunkFile;
+    }
+
+    public function getFileSize(): int
+    {
+        return $this->fileSize;
     }
 
     public function getFileOriginalName(): string
@@ -38,10 +44,16 @@ class Chunk implements ChunkInterface
 
     public function getChunksId(): string
     {
+        $id = \join([$this->getFileOriginalName(), $this->getFileSize()]);
+
         if (Session::isStarted()) {
-            return Session::getId();
+            return \md5(Session::getId().$id);
         }
 
-        //todo:
+        if (\auth()->check()) {
+            return \md5(\auth()->id().$id);
+        }
+
+        return \md5($id);
     }
 }
