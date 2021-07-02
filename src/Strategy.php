@@ -6,12 +6,13 @@ use Illuminate\Config\Repository as Config;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\UploadedFile;
 use Overtrue\LaravelUploader\Contracts\Strategy as StrategyInterface;
+use Overtrue\LaravelUploader\Drivers\Single;
 
 class Strategy implements StrategyInterface
 {
     protected Repository $config;
     protected int $maxSize = 0;
-    protected array $disks;
+    protected string $disk;
     protected string $formName;
     protected array $allowedMimes = [];
     protected string $filenameType;
@@ -23,7 +24,7 @@ class Strategy implements StrategyInterface
         $this->formName = $this->config->get('form_name', 'file');
         $this->maxSize = $this->size2bytes($this->config->get('max_size', '2m'));
         $this->filenameType = $this->config->get('filename_type', 'md5_file');
-        $this->disks = (array)$this->config->get('disks', \config('filesystems.default'));
+        $this->disk = $this->config->get('disk', \config('filesystems.default'));
         $this->allowedMimes = $this->config->get('allowed_mimes', ['image/jpeg', 'image/png', 'image/bmp', 'image/gif']);
     }
 
@@ -32,9 +33,9 @@ class Strategy implements StrategyInterface
         return $this->formName;
     }
 
-    public function getDisks(): array
+    public function getDisk(): string
     {
-        return $this->disks;
+        return $this->disk;
     }
 
     public function getAllowedMimes(): array
@@ -102,18 +103,18 @@ class Strategy implements StrategyInterface
         return intval(round($bytes, 2));
     }
 
-    public function getChunkCountKey(): string
+    public function getDriver(): string
     {
-        return $this->config->get('chunk_count_key', 'chunk_count');
+        return $this->config->get('driver', Single::class);
     }
 
-    public function getChunkIndexKey(): string
+    public function getConfig(): Config
     {
-        return $this->config->get('chunk_index_key', 'chunk_index');
+        return $this->config;
     }
 
-    public function getChunkMaxSize(): int
+    public function getChunkDisk(): string
     {
-        return $this->size2bytes($this->config->get('chunk_index_key', 'chunk_index'));
+        return $this->config->get('chunk_disk', \config('filesystems.default', 'local'));
     }
 }

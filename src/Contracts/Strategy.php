@@ -2,17 +2,17 @@
 
 namespace Overtrue\LaravelUploader\Contracts;
 
+use Illuminate\Config\Repository as ConfigInterface;
 use Illuminate\Http\UploadedFile;
 
 interface Strategy
 {
+    public function getDriver(): string;
+    public function getConfig(): ConfigInterface;
     public function getFormName(): string;
-    public function getDisks(): array;
+    public function getDisk(): string;
     public function getAllowedMimes(): array;
     public function getMaxSize(): int;
-    public function getChunkCountKey(): string;
-    public function getChunkIndexKey(): string;
     public function getChunkDisk(): string;
-    public function getChunkMaxSize(): int;
     public function getPath(UploadedFile $uploadedFile): string;
 }
