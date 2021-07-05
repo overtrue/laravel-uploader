@@ -13,7 +13,7 @@ use Overtrue\LaravelUploader\Events\FileUploading;
 
 class UploadManager
 {
-    public function upload(Request $request, string | Strategy $strategy)
+    public function upload(Request $request, string | Strategy $strategy): Result
     {
         $driver = $this->getDriver($strategy);
 
@@ -40,7 +40,7 @@ class UploadManager
 
     public function performSingleUpload(UploadedFile $file, Strategy $strategy): Result
     {
-        $path = $strategy->getPath($file);
+        $path = $strategy->getStoragePath($file);
 
         Event::dispatch(new FileUploading(file: $file, strategy: $strategy));
 
@@ -63,14 +63,20 @@ class UploadManager
 
         Event::dispatch(new ChunkUploaded(chunk: $chunk, result: $result, strategy: $strategy));
 
-        if ($chunk->isLast()) {
+        \usleep(\mt_rand(0, 10000));
+
+        $uploadedParts = $disk->files($directory);
+
+        $percentage = \intval(count($uploadedParts) / $chunk->getChunksCount()) * 100;
+
+        if ($percentage >= 100) {
             $file = ChunkMerger::merge($directory, $strategy->getChunkDisk());
             $uploadedFile = new UploadedFile($file->getPath(), $chunk->getFileOriginalName(), null, null, true);
 
             return $this->performSingleUpload($uploadedFile, $strategy);
         }
 
-        return $result;
+        return new ChunkResult($chunk, $path, $strategy, $percentage);
     }
 
     public function saveFile(UploadedFile $file, Strategy $strategy, string $path): Result

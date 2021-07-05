@@ -17,7 +17,7 @@ class Strategy implements StrategyInterface
     protected array $allowedMimes = [];
     protected string $filenameType;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
         $this->config = new Config($config);
 
@@ -48,9 +48,9 @@ class Strategy implements StrategyInterface
         return $this->maxSize;
     }
 
-    public function getPath(UploadedFile $uploadedFile): string
+    public function getStoragePath(UploadedFile $uploadedFile): string
     {
-        $directory = \rtrim($this->config->get('directory', ''), '/');
+        $directory = \rtrim($this->config->get('directory', $this->config->get('prefix', '')), '/');
 
         if (!empty($directory)) {
             $directory = $this->replacePathVariables($directory);
@@ -67,6 +67,21 @@ class Strategy implements StrategyInterface
                 },
             ]
         );
+    }
+
+    public function getDriver(): string
+    {
+        return $this->config->get('driver', Single::class);
+    }
+
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    public function getChunkDisk(): string
+    {
+        return $this->config->get('chunk_disk', \config('filesystems.default', 'local'));
     }
 
     protected function replacePathVariables(string $path): string
@@ -101,20 +116,5 @@ class Strategy implements StrategyInterface
         }
 
         return intval(round($bytes, 2));
-    }
-
-    public function getDriver(): string
-    {
-        return $this->config->get('driver', Single::class);
-    }
-
-    public function getConfig(): Config
-    {
-        return $this->config;
-    }
-
-    public function getChunkDisk(): string
-    {
-        return $this->config->get('chunk_disk', \config('filesystems.default', 'local'));
     }
 }

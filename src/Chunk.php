@@ -10,10 +10,10 @@ class Chunk implements ChunkInterface
 {
     public function __construct(
         protected UploadedFile $chunkFile,
-        protected string $originalName,
-        protected int $fileSize,
+        protected string $fileOriginalName,
+        protected int $totalSize,
         protected int $index,
-        protected bool $isLast,
+        protected int $count,
     ) {
     }
 
@@ -22,29 +22,24 @@ class Chunk implements ChunkInterface
         return $this->index;
     }
 
-    public function isLast(): bool
-    {
-        return $this->isLast();
-    }
-
     public function getChunkFile(): UploadedFile
     {
         return $this->chunkFile;
     }
 
-    public function getFileSize(): int
+    public function getTotalSize(): int
     {
-        return $this->fileSize;
+        return $this->totalSize;
     }
 
     public function getFileOriginalName(): string
     {
-        return $this->originalName;
+        return $this->fileOriginalName;
     }
 
     public function getChunksId(): string
     {
-        $id = \join([$this->getFileOriginalName(), $this->getFileSize()]);
+        $id = \join([$this->getFileOriginalName(), $this->getTotalSize()]);
 
         if (Session::isStarted()) {
             return \md5(Session::getId().$id);
@@ -55,5 +50,10 @@ class Chunk implements ChunkInterface
         }
 
         return \md5($id);
+    }
+
+    public function getChunksCount(): int
+    {
+        return $this->count;
     }
 }

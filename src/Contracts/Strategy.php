@@ -14,5 +14,5 @@ interface Strategy
     public function getAllowedMimes(): array;
     public function getMaxSize(): int;
     public function getChunkDisk(): string;
-    public function getPath(UploadedFile $uploadedFile): string;
+    public function getStoragePath(UploadedFile $uploadedFile): string;
 }

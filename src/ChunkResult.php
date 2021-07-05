@@ -5,11 +5,11 @@ namespace Overtrue\LaravelUploader;
 class ChunkResult extends Result
 {
     public function __construct(
-        public string $disk,
-        public string $path,
         public Chunk $chunk,
+        public string $path,
+        public Strategy $strategy,
         public int $percentage
     ) {
-        parent::__construct($disk, $path, $this->chunk->getChunkFile());
+        parent::__construct($chunk->getChunkFile(), $path, $strategy);
     }
 }

@@ -1,24 +1,35 @@
 <?php
 
-/*
- * This file is part of the overtrue/laravel-uploader.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
+namespace Tests;
 
-class TestCase extends PHPUnit_Framework_TestCase
+use Overtrue\LaravelUploader\UploadServiceProvider;
+
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-    public function teardown()
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     *
+     * @return array
+     */
+    protected function getPackageProviders($app)
     {
-        parent::tearDown();
+        return [UploadServiceProvider::class];
+    }
 
-        if ($container = Mockery::getContainer()) {
-            $this->addToAssertionCount($container->mockery_getExpectationCount());
-        }
-
-        Mockery::close();
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('database.default', 'testing');
+        $app['config']->set(
+            'database.connections.testing',
+            [
+                'driver' => 'sqlite',
+                'database' => ':memory:',
+                'prefix' => '',
+            ]
+        );
     }
 }

@@ -22,14 +22,9 @@ class Chunk extends Driver implements ChunkDriverInterface
             $this->getFile($request, $config),
             $this->getFileSize($request),
             $this->getCurrentIndex($request),
-            $this->isLastChunk($request),
+            $this->getChunksCount($request),
             $this->getFileOriginalName($request),
         );
-    }
-
-    public function isLastChunk(Request $request): bool
-    {
-        return $this->getCurrentIndex($request) === $request->get('chunk_count');
     }
 
     public function getCurrentIndex(Request $request): int
@@ -45,5 +40,10 @@ class Chunk extends Driver implements ChunkDriverInterface
     public function getFileSize(Request $request)
     {
         return $request->get('total_size');
+    }
+
+    public function getChunksCount(Request $request)
+    {
+        return $request->get('chunk_count');
     }
 }
