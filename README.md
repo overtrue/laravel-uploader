@@ -2,6 +2,8 @@
 
 :palm_tree: An upload component for Laravel.
 
+[![Sponsor me](https://raw.githubusercontent.com/overtrue/overtrue/master/sponsor-me-button-s.svg)](https://github.com/sponsors/overtrue)
+
 ## Installing
 
 1. install package: 
