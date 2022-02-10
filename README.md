@@ -6,7 +6,7 @@
 
 ## Installing
 
-1. install package: 
+1. Install package: 
 
     ```sh
     $ composer require overtrue/laravel-uploader -vvv
