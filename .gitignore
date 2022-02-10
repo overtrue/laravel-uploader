@@ -13,3 +13,4 @@ yarn.lock
 composer.lock
 .php_cs.cache
 /node_modules
+.php-cs-fixer.cache
