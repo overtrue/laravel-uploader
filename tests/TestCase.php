@@ -6,7 +6,7 @@ use Mockery;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    public function teardown()
+    public function teardown(): void
     {
         parent::tearDown();
 
