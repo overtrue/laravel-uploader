@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 class StrategyResolver
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param string|null              $name
-     *
      * @return \Overtrue\LaravelUploader\Strategy
      */
     public static function resolveFromRequest(Request $request, string $name = null)
@@ -21,7 +18,7 @@ class StrategyResolver
 
         $formName = $config['name'] ?? 'file';
 
-        \abort_if(!$request->hasFile($formName), 422, \sprintf('No file "%s" uploaded.', $formName));
+        \abort_if(! $request->hasFile($formName), 422, \sprintf('No file "%s" uploaded.', $formName));
 
         return new Strategy($config, $request->file($formName));
     }

@@ -8,13 +8,11 @@ use Illuminate\Support\Facades\Facade;
 class LaravelUploader extends Facade
 {
     /**
-     * @param array $options
-     *
      * @throws BindingResolutionException
      */
     public static function routes(array $options = [])
     {
-        if (!self::$app->routesAreCached()) {
+        if (! self::$app->routesAreCached()) {
             self::$app->make('router')->post(
                 'files/upload',
                 \array_merge([

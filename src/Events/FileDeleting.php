@@ -10,8 +10,6 @@ class FileDeleting
 
     /**
      * Create a new event instance.
-     *
-     * @param \Illuminate\Http\UploadedFile $file
      */
     public function __construct(UploadedFile $file)
     {

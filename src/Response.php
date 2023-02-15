@@ -10,21 +10,29 @@ use Illuminate\Support\Facades\Storage;
 class Response implements Jsonable, Arrayable
 {
     public string $disk;
+
     public string $path;
+
     public ?string $mime;
+
     public string $size;
+
     public string $url;
+
     public string $relativeUrl;
+
     public string $filename;
+
     public string $extension;
+
     public string $originalName;
+
     public UploadedFile $file;
+
     public Strategy $strategy;
 
     /**
-     * @param string                             $path
-     * @param \Overtrue\LaravelUploader\Strategy $strategy
-     * @param \Illuminate\Http\UploadedFile      $file
+     * @param  \Overtrue\LaravelUploader\Strategy  $strategy
      */
     public function __construct(string $path, Strategy $strategy, UploadedFile $file)
     {
@@ -54,8 +62,7 @@ class Response implements Jsonable, Arrayable
     }
 
     /**
-     * @param int $options
-     *
+     * @param  int  $options
      * @return string
      */
     public function toJson($options = 0)

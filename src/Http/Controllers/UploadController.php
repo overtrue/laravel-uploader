@@ -11,7 +11,6 @@ class UploadController extends BaseController
     /**
      * Handle file upload.
      *
-     * @param Request $request
      *
      * @return \Overtrue\LaravelUploader\Response
      */

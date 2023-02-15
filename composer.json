@@ -8,7 +8,7 @@
     }
   ],
   "require": {
-    "laravel/framework": "^9.0",
+    "laravel/framework": "^9.0|^10.0",
     "ext-json": "*"
   },
   "autoload": {
@@ -17,8 +17,9 @@
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5",
-    "friendsofphp/php-cs-fixer": "^3.0"
+    "phpunit/phpunit": "^10.0",
+    "brainmaestro/composer-git-hooks": "dev-master",
+    "laravel/pint": "^1.5"
   },
   "extra": {
     "laravel": {
@@ -50,9 +51,9 @@
       "cghooks update"
     ],
     "cghooks": "vendor/bin/cghooks",
-    "check-style": "php-cs-fixer fix --using-cache=no --diff --dry-run --ansi",
-    "fix-style": "php-cs-fixer fix --using-cache=no --ansi",
-    "test": "vendor/bin/phpunit  --colors=always --testdox"
+    "check-style": "vendor/bin/pint --test",
+    "fix-style": "vendor/bin/pint",
+    "test": "vendor/bin/phpunit --colors=always"
   },
   "scripts-descriptions": {
     "test": "Run all tests.",

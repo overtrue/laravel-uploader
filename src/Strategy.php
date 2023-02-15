@@ -12,17 +12,19 @@ use Overtrue\LaravelUploader\Events\FileUploading;
 class Strategy
 {
     protected string $disk;
+
     protected string $directory;
+
     protected array $mimes = [];
+
     protected string $name;
+
     protected int $maxSize = 0;
+
     protected string $filenameType;
+
     protected UploadedFile $file;
 
-    /**
-     * @param  array  $config
-     * @param  UploadedFile  $file
-     */
     public function __construct(array $config, UploadedFile $file)
     {
         $config = new Fluent($config);
@@ -117,18 +119,16 @@ class Strategy
 
     public function validate()
     {
-        if (!$this->isValidMime()) {
+        if (! $this->isValidMime()) {
             \abort(422, \sprintf('Invalid mime "%s".', $this->file->getClientMimeType()));
         }
 
-        if (!$this->isValidSize()) {
+        if (! $this->isValidSize()) {
             \abort(422, \sprintf('File has too large size("%s").', $this->file->getSize()));
         }
     }
 
     /**
-     * @param  array  $options
-     *
      * @return \Overtrue\LaravelUploader\Response
      */
     public function upload(array $options = [])
@@ -156,7 +156,6 @@ class Strategy
     /**
      * Replace date variable in dir path.
      *
-     * @param  string  $dir
      *
      * @return string
      */
@@ -176,23 +175,22 @@ class Strategy
 
     /**
      * @param  mixed  $humanFileSize
-     *
      * @return int
      */
     protected function filesize2bytes($humanFileSize)
     {
-        $bytesUnits = array(
+        $bytesUnits = [
             'K' => 1024,
             'M' => 1024 * 1024,
             'G' => 1024 * 1024 * 1024,
             'T' => 1024 * 1024 * 1024 * 1024,
             'P' => 1024 * 1024 * 1024 * 1024 * 1024,
-        );
+        ];
 
         $bytes = floatval($humanFileSize);
 
         if (preg_match('~([KMGTP])$~si', rtrim($humanFileSize, 'B'), $matches)
-            && !empty($bytesUnits[\strtoupper($matches[1])])) {
+            && ! empty($bytesUnits[\strtoupper($matches[1])])) {
             $bytes *= $bytesUnits[\strtoupper($matches[1])];
         }
 
