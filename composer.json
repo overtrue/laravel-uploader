@@ -16,6 +16,11 @@
       "Overtrue\\LaravelUploader\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
+  },
   "require-dev": {
     "phpunit/phpunit": "^10.0",
     "brainmaestro/composer-git-hooks": "dev-master",
