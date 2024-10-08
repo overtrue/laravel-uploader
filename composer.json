@@ -8,7 +8,7 @@
     }
   ],
   "require": {
-    "laravel/framework": "^9.0|^10.0|^11.0",
+    "laravel/framework": "^46011",
     "ext-json": "*"
   },
   "autoload": {
