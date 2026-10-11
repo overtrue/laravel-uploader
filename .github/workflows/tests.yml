@@ -37,6 +37,8 @@ jobs:
         env:
           DEPENDENCIES: ${{ matrix.dependencies }}
         run: |
+          # setup-php disables implicit audits; retain Composer's default here too.
+          unset COMPOSER_NO_AUDIT
           if [ "$DEPENDENCIES" = lowest ]; then
             composer update --prefer-lowest --prefer-stable --with-all-dependencies --prefer-dist --no-interaction --no-progress
           else
