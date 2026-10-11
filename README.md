@@ -4,19 +4,28 @@
 
 [![Sponsor me](https://github.com/overtrue/overtrue/blob/master/sponsor-me-button-s.svg?raw=true)](https://github.com/sponsors/overtrue)
 
+## Requirements
+
+- PHP `^8.3`
+- Laravel `^13.30`
+
+Upgrading from 3.x? Read [the 4.0 migration guide](MIGRATING.md), especially the new failed-write exception contract.
+
 ## Installing
 
 1. Install package: 
 
     ```sh
-    $ composer require overtrue/laravel-uploader -vvv
+    $ composer require overtrue/laravel-uploader:^4.0
     ```
 
-    and publish the assets using command:
+    Publish the configuration and translations before using the uploader:
 
     ```sh
     $ php artisan vendor:publish --provider=Overtrue\\LaravelUploader\\UploadServiceProvider
     ```
+
+    The provider publishes configuration; it does not automatically merge defaults. Review your existing `config/uploader.php` when upgrading, preserving custom strategies.
 
 2. Routing
 
@@ -78,9 +87,9 @@ If you want update the response, you can get key information from the return val
 You can get all these public properties:
 
 ```php
-int $size;
+string $size;
 string $path;
-string $mime;
+?string $mime;
 string $url;
 string $relativeUrl;
 string $filename;
@@ -88,6 +97,27 @@ string $originalName;
 \Illuminate\Http\UploadedFile   $file;
 \Overtrue\LaravelUploader\Strategy $strategy;
 ```
+
+### Failed uploads
+
+A storage write returning `false` throws `League\Flysystem\UnableToWriteFile`, even for a disk configured with `throw => false`. No success response or `FileUploaded` event is produced. Exceptions already thrown by storage or event listeners continue to propagate. See [catch guidance and retry considerations](MIGRATING.md#failed-writes-throw).
+
+### URLs and MIME overrides
+
+`uploader.base_uri` overrides URLs for non-local disks only. Local disks use their own URL configuration.
+
+A custom strategy's `mimes` list replaces the entire default list. Omit it to inherit defaults, use `[]` to reject all types, or `['*']` to allow every type. MIME checks use client-provided metadata, not content inspection; apply any additional validation your application needs.
+
+## Testing
+
+```sh
+composer install
+composer test
+composer check-style
+composer audit
+```
+
+CI verifies Laravel 13 with lowest compatible dependencies on PHP 8.3, and highest compatible dependencies on PHP 8.3, 8.4, and 8.5. The lowest dependency set is checked on the minimum PHP runtime: older transitive dependencies can emit deprecations on PHP 8.4/8.5. Deprecations are not suppressed. Tests use temporary local storage and mocked remote disks; they require no cloud-storage credentials.
 
 ## Recommend clients
 
