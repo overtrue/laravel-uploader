@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Fluent;
+use League\Flysystem\UnableToWriteFile;
 use Overtrue\LaravelUploader\Events\FileUploaded;
 use Overtrue\LaravelUploader\Events\FileUploading;
 
@@ -114,7 +115,7 @@ class Strategy
      */
     public function isValidSize()
     {
-        return $this->file->getSize() <= $this->maxSize || 0 === $this->maxSize;
+        return $this->file->getSize() <= $this->maxSize || $this->maxSize === 0;
     }
 
     public function validate()
@@ -129,7 +130,9 @@ class Strategy
     }
 
     /**
-     * @return \Overtrue\LaravelUploader\Response
+     * @return Response
+     *
+     * @throws UnableToWriteFile When the filesystem reports a failed write.
      */
     public function upload(array $options = [])
     {
@@ -141,16 +144,22 @@ class Strategy
 
         $stream = fopen($this->file->getRealPath(), 'r');
 
-        $result = Storage::disk($this->disk)->put($path, $stream, $options);
-        $response = new Response($result ? $path : false, $this, $this->file);
+        try {
+            $result = Storage::disk($this->disk)->put($path, $stream, $options);
+            if ($result === false) {
+                throw UnableToWriteFile::atLocation($path);
+            }
 
-        Event::dispatch(new FileUploaded($this->file, $response, $this));
+            $response = new Response($path, $this, $this->file);
 
-        if (is_resource($stream)) {
-            fclose($stream);
+            Event::dispatch(new FileUploaded($this->file, $response, $this));
+
+            return $response;
+        } finally {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
         }
-
-        return $response;
     }
 
     /**

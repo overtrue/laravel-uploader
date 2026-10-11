@@ -70,6 +70,6 @@ return [
             'directory' => 'avatars/{Y}/{m}/{d}',
         ],
 
-        //...
+        // ...
     ],
 ];

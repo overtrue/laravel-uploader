@@ -1,0 +1,72 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.3'
+            dependencies: lowest
+          - php: '8.3'
+            dependencies: highest
+          - php: '8.4'
+            dependencies: highest
+          - php: '8.5'
+            dependencies: highest
+    name: PHP ${{ matrix.php }} / Laravel 13 / ${{ matrix.dependencies }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, fileinfo, mbstring, xml, xmlwriter
+          coverage: none
+          tools: composer:v2
+      - name: Validate package metadata
+        run: composer validate --strict
+      - name: Install dependencies
+        env:
+          DEPENDENCIES: ${{ matrix.dependencies }}
+        run: |
+          # setup-php disables implicit audits; retain Composer's default here too.
+          unset COMPOSER_NO_AUDIT
+          if [ "$DEPENDENCIES" = lowest ]; then
+            composer update --prefer-lowest --prefer-stable --with-all-dependencies --prefer-dist --no-interaction --no-progress
+          else
+            composer update --with-all-dependencies --prefer-dist --no-interaction --no-progress
+          fi
+      - name: Verify the dependency matrix and platform
+        env:
+          EXPECTED_PHP: ${{ matrix.php }}
+        run: |
+          php -r '
+            require "vendor/autoload.php";
+            $versions = [
+              "PHP" => [PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION, getenv("EXPECTED_PHP")],
+              "Laravel" => [explode(".", Composer\InstalledVersions::getVersion("laravel/framework"))[0], "13"],
+              "Testbench" => [explode(".", Composer\InstalledVersions::getVersion("orchestra/testbench"))[0], "11"],
+              "PHPUnit" => [explode(".", Composer\InstalledVersions::getVersion("phpunit/phpunit"))[0], "11"],
+            ];
+            foreach ($versions as $package => [$actual, $expected]) {
+              if ($actual !== $expected) {
+                fwrite(STDERR, "$package: expected $expected, installed $actual\n");
+                exit(1);
+              }
+              echo "$package: $actual\n";
+            }
+          '
+          composer check-platform-reqs
+          composer audit
+      - name: Check style
+        run: composer check-style
+      - name: Run tests
+        run: composer test

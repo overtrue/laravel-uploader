@@ -7,14 +7,19 @@ use Illuminate\Http\Request;
 class StrategyResolver
 {
     /**
-     * @return \Overtrue\LaravelUploader\Strategy
+     * @return Strategy
      */
-    public static function resolveFromRequest(Request $request, string $name = null)
+    public static function resolveFromRequest(Request $request, ?string $name = null)
     {
+        $overrides = config("uploader.strategies.{$name}", []);
         $config = \array_replace_recursive(
             config('uploader.strategies.default', []),
-            config("uploader.strategies.{$name}", [])
+            $overrides
         );
+
+        if (array_key_exists('mimes', $overrides)) {
+            $config['mimes'] = $overrides['mimes'];
+        }
 
         $formName = $config['name'] ?? 'file';
 
