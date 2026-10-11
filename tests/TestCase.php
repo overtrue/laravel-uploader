@@ -10,6 +10,13 @@ abstract class TestCase extends Orchestra
 {
     private array $temporaryFiles = [];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutDeprecationHandling();
+    }
+
     protected function getPackageProviders($app)
     {
         return [UploadServiceProvider::class];

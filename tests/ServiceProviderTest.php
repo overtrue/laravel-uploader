@@ -12,6 +12,13 @@ class ServiceProviderTest extends TestCase
 {
     private string $publishDirectory;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutDeprecationHandling();
+    }
+
     protected function getPackageProviders($app)
     {
         return [UploadServiceProvider::class];

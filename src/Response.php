@@ -34,8 +34,8 @@ class Response implements Arrayable, Jsonable
     public function __construct(string $path, Strategy $strategy, UploadedFile $file)
     {
         $disk = Storage::disk($strategy->getDisk());
-        $baseUri = rtrim(config('uploader.base_uri'), '/');
-        $driver = config('filesystems.disks.%s.driver', $strategy->getDisk());
+        $baseUri = rtrim(config('uploader.base_uri') ?? '', '/');
+        $driver = config("filesystems.disks.{$strategy->getDisk()}.driver");
         $relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
         $url = url($path);
 
