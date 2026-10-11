@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Fluent;
+use League\Flysystem\UnableToWriteFile;
 use Overtrue\LaravelUploader\Events\FileUploaded;
 use Overtrue\LaravelUploader\Events\FileUploading;
 
@@ -130,6 +131,8 @@ class Strategy
 
     /**
      * @return Response
+     *
+     * @throws UnableToWriteFile When the filesystem reports a failed write.
      */
     public function upload(array $options = [])
     {
@@ -143,7 +146,11 @@ class Strategy
 
         try {
             $result = Storage::disk($this->disk)->put($path, $stream, $options);
-            $response = new Response($result ? $path : false, $this, $this->file);
+            if ($result === false) {
+                throw UnableToWriteFile::atLocation($path);
+            }
+
+            $response = new Response($path, $this, $this->file);
 
             Event::dispatch(new FileUploaded($this->file, $response, $this));
 
