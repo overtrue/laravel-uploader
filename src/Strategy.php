@@ -141,16 +141,18 @@ class Strategy
 
         $stream = fopen($this->file->getRealPath(), 'r');
 
-        $result = Storage::disk($this->disk)->put($path, $stream, $options);
-        $response = new Response($result ? $path : false, $this, $this->file);
+        try {
+            $result = Storage::disk($this->disk)->put($path, $stream, $options);
+            $response = new Response($result ? $path : false, $this, $this->file);
 
-        Event::dispatch(new FileUploaded($this->file, $response, $this));
+            Event::dispatch(new FileUploaded($this->file, $response, $this));
 
-        if (is_resource($stream)) {
-            fclose($stream);
+            return $response;
+        } finally {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
         }
-
-        return $response;
     }
 
     /**
