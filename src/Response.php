@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-class Response implements Jsonable, Arrayable
+class Response implements Arrayable, Jsonable
 {
     public string $disk;
 
@@ -31,9 +31,6 @@ class Response implements Jsonable, Arrayable
 
     public Strategy $strategy;
 
-    /**
-     * @param  \Overtrue\LaravelUploader\Strategy  $strategy
-     */
     public function __construct(string $path, Strategy $strategy, UploadedFile $file)
     {
         $disk = Storage::disk($strategy->getDisk());
@@ -42,7 +39,7 @@ class Response implements Jsonable, Arrayable
         $relativeUrl = \sprintf('/%s', \ltrim($path, '/'));
         $url = url($path);
 
-        if ($baseUri && 'local' !== $driver) {
+        if ($baseUri && $driver !== 'local') {
             $url = \sprintf('%s/%s', $baseUri, $path);
         } elseif (method_exists($disk, 'url')) {
             $url = $disk->url($path);

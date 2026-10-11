@@ -114,7 +114,7 @@ class Strategy
      */
     public function isValidSize()
     {
-        return $this->file->getSize() <= $this->maxSize || 0 === $this->maxSize;
+        return $this->file->getSize() <= $this->maxSize || $this->maxSize === 0;
     }
 
     public function validate()
@@ -129,7 +129,7 @@ class Strategy
     }
 
     /**
-     * @return \Overtrue\LaravelUploader\Response
+     * @return Response
      */
     public function upload(array $options = [])
     {

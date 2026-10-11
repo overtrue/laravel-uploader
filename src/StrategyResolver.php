@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 class StrategyResolver
 {
     /**
-     * @return \Overtrue\LaravelUploader\Strategy
+     * @return Strategy
      */
-    public static function resolveFromRequest(Request $request, string $name = null)
+    public static function resolveFromRequest(Request $request, ?string $name = null)
     {
         $config = \array_replace_recursive(
             config('uploader.strategies.default', []),
